@@ -36,13 +36,15 @@ class ZhuyinHelper {
     pinyinList.forEach((singlePinyin) {
       zhuyin += _singlePinyinToZhuYin(singlePinyin) + ' ';
     });
-    zhuyin = zhuyin.substring(0, zhuyin.length);
+    zhuyin = zhuyin.substring(0, zhuyin.length - 1);
     zhuyin = zhuyin.replaceAll(' ', separator);
+    zhuyin = zhuyin.replaceAll(separator + separator, separator + ' ');
     return zhuyin;
   }
 
   /// 單個拼音轉注音
   static String _singlePinyinToZhuYin(String pinyin) {
+    if (_isDigit(pinyin)) return pinyin;
     String tone = '1';
     pinyin = pinyin.replaceAll("v", "ü");
 
@@ -85,7 +87,7 @@ class ZhuyinHelper {
       if (pinyinToZhuyinMap.containsKey(word)) {
         result = pinyinToZhuyinMap[word]!;
       } else {
-        throw PinyinException("No mapping for given pinyin input: $word");
+        return word;
       }
     } else {
       if (zhuyinToPinyinMap.containsKey(word)) {
@@ -95,7 +97,7 @@ class ZhuyinHelper {
           result = zhuyinToPinyinMap[word]!;
         }
       } else {
-        throw PinyinException("No mapping for given zhuyin input: $word");
+        return word;
       }
     }
 

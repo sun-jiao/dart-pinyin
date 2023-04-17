@@ -1,5 +1,4 @@
 import 'package:lpinyin/lpinyin.dart';
-import 'package:lpinyin/src/chinese_helper.dart';
 
 void main() {
   String str = "天府广场";
