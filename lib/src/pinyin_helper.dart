@@ -8,8 +8,7 @@ import 'package:pinyin/src/pinyin_resource.dart';
 /// 汉字转拼音类.
 class PinyinHelper {
   static Map<String, String> pinyinMap = PinyinResource.getPinyinResource();
-  static Map<String, String> multiPinyinMap =
-      PinyinResource.getMultiPinyinResource();
+  static Map<String, String> multiPinyinMap = PinyinResource.getMultiPinyinResource();
 
   /// 拼音分隔符
   static const String pinyinSeparator = ',';
@@ -19,6 +18,52 @@ class PinyinHelper {
   static const String allUnmarkedVowel = 'aeiouv';
   static int minMultiLength = 2;
   static int maxMultiLength = 0;
+
+  static String _getPinyin(
+    String str,
+    bool isShort,
+    String separator,
+    Function(StringBuffer sb, String char) onKeyError,
+    PinyinFormat format,
+  ) {
+    if (str.isEmpty) return '';
+    StringBuffer sb = StringBuffer();
+    str = ChineseHelper.convertToSimplifiedChinese(str);
+
+    List runes = str.runes.toList();
+    int runeLen = runes.length;
+    int i = 0;
+    while (i < runeLen) {
+      String subStr = String.fromCharCode(runes[i]);
+      MultiPinyin? node = convertToMultiPinyin(subStr, separator, format);
+      if (node == null) {
+        String _char = String.fromCharCode(runes[i]);
+        if (ChineseHelper.isChinese(_char)) {
+          List<String> pinyinArray = convertToPinyinArray(_char, format);
+          if (pinyinArray.isNotEmpty) {
+            if (isShort) {
+              sb.write(pinyinArray[0].substring(0, 1));
+            } else {
+              sb.write(pinyinArray[0]);
+            }
+          } else {
+            onKeyError.call(sb, _char);
+          }
+        } else {
+          sb.write(_char);
+        }
+        if (i < runeLen) {
+          sb.write(separator);
+        }
+        i++;
+      } else {
+        sb.write(node.pinyin);
+        i += node.word!.length;
+      }
+    }
+    String res = sb.toString();
+    return ((res.endsWith(separator) && separator != '') ? res.substring(0, res.length - 1) : res);
+  }
 
   /// 获取字符串首字拼音
   /// @param str 需要转换的字符串
@@ -32,36 +77,8 @@ class PinyinHelper {
   /// 获取字符串对应拼音的首字母
   /// @param str 需要转换的字符串
   /// @return 对应拼音的首字母 (成都 cd)
-  static String getShortPinyin(String str) {
-    if (str.isEmpty) return '';
-    StringBuffer sb = StringBuffer();
-    StringBuffer temp = StringBuffer();
-
-    List runes = str.runes.toList();
-    int runeLen = runes.length;
-    for (int i = 0; i < runeLen; i++) {
-      String c = String.fromCharCode(runes[i]);
-      if (ChineseHelper.isChinese(c)) {
-        int j = i + 1;
-        temp.write(c);
-        while (j < runeLen && (ChineseHelper.isChinese(String.fromCharCode(runes[j])))) {
-          temp.write(String.fromCharCode(runes[j]));
-          j++;
-        }
-        String pinyin = getPinyin(temp.toString(), separator: pinyinSeparator);
-        List<String> pinyinArray = pinyin.split(pinyinSeparator);
-        pinyinArray.forEach((v) {
-          sb.write(v[0]);
-          i++;
-        });
-        i--;
-        temp.clear();
-      } else {
-        sb.write(c);
-      }
-    }
-    return sb.toString();
-  }
+  static String getShortPinyin(String str) =>
+      _getPinyin(str, true, '', (sb, char) => null, PinyinFormat.WITHOUT_TONE);
 
   /// 将字符串转换成相应格式的拼音
   /// @param str 需要转换的字符串
@@ -72,43 +89,9 @@ class PinyinHelper {
     String str, {
     String separator = ' ',
     PinyinFormat format = PinyinFormat.WITHOUT_TONE,
-  }) {
-    if (str.isEmpty) return '';
-    StringBuffer sb = StringBuffer();
-    str = ChineseHelper.convertToSimplifiedChinese(str);
-
-    List runes = str.runes.toList();
-    int runeLen = runes.length;
-    int i = 0;
-    while (i < runeLen) {
-      String subStr = String.fromCharCode(runes[i]);
-      MultiPinyin? node = convertToMultiPinyin(subStr, separator, format);
-      if (node == null) {
-        String _char = String.fromCharCode(runes[i]);
-        if (ChineseHelper.isChinese(_char)) {
-          List<String> pinyinArray = convertToPinyinArray(_char, format);
-          if (pinyinArray.isNotEmpty) {
-            sb.write(pinyinArray[0]);
-          } else {
-            throw PinyinException("Can't convert to pinyin: $_char");
-          }
-        } else {
-          sb.write(_char);
-        }
-        if (i < runeLen) {
-          sb.write(separator);
-        }
-        i++;
-      } else {
-        sb.write(node.pinyin);
-        i += node.word!.length;
-      }
-    }
-    String res = sb.toString();
-    return ((res.endsWith(separator) && separator != '')
-        ? res.substring(0, res.length - 1)
-        : res);
-  }
+  }) =>
+      _getPinyin(str, false, separator,
+          (sb, char) => throw PinyinException("Can't convert to pinyin: $char"), format);
 
   /// 将字符串转换成相应格式的拼音 (不能转换的字拼音默认用' '替代 )
   /// @param str 需要转换的字符串
@@ -121,45 +104,11 @@ class PinyinHelper {
     String separator = ' ',
     String defPinyin = ' ',
     PinyinFormat format = PinyinFormat.WITHOUT_TONE,
-  }) {
-    if (str.isEmpty) return '';
-    StringBuffer sb = StringBuffer();
-    str = ChineseHelper.convertToSimplifiedChinese(str);
-
-    List runes = str.runes.toList();
-    int runeLen = runes.length;
-    int i = 0;
-    while (i < runeLen) {
-      String subStr = String.fromCharCode(runes[i]);
-      MultiPinyin? node = convertToMultiPinyin(subStr, separator, format);
-      if (node == null) {
-        String _char = String.fromCharCode(runes[i]);
-        if (ChineseHelper.isChinese(_char)) {
-          List<String> pinyinArray = convertToPinyinArray(_char, format);
-          if (pinyinArray.isNotEmpty) {
-            sb.write(pinyinArray[0]);
-          } else {
-            sb.write(defPinyin);
-            print(
-                "### Can't convert to pinyin: $_char , defPinyin: $defPinyin");
-          }
-        } else {
-          sb.write(_char);
-        }
-        if (i < runeLen) {
-          sb.write(separator);
-        }
-        i++;
-      } else {
-        sb.write(node.pinyin);
-        i += node.word!.length;
-      }
-    }
-    String res = sb.toString();
-    return ((res.endsWith(separator) && separator != '')
-        ? res.substring(0, res.length - 1)
-        : res);
-  }
+  }) =>
+      _getPinyin(str, false, separator, (sb, char) {
+        sb.write(defPinyin);
+        print("### Can't convert to pinyin: $char , defPinyin: $defPinyin");
+      }, format);
 
   /// 获取多音字拼音
   /// @param str 需要转换的字符串
