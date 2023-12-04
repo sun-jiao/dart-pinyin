@@ -1,9 +1,9 @@
 import 'dart:collection';
 
-import 'package:lpinyin/src/chinese_helper.dart';
-import 'package:lpinyin/src/pinyin_exception.dart';
-import 'package:lpinyin/src/pinyin_format.dart';
-import 'package:lpinyin/src/pinyin_resource.dart';
+import 'package:pinyin/src/chinese_helper.dart';
+import 'package:pinyin/src/pinyin_exception.dart';
+import 'package:pinyin/src/pinyin_format.dart';
+import 'package:pinyin/src/pinyin_resource.dart';
 
 /// 汉字转拼音类.
 class PinyinHelper {
@@ -36,13 +36,16 @@ class PinyinHelper {
     if (str.isEmpty) return '';
     StringBuffer sb = StringBuffer();
     StringBuffer temp = StringBuffer();
-    for (int i = 0, len = str.length; i < len; i++) {
-      String c = str[i];
+
+    List runes = str.runes.toList();
+    int runeLen = runes.length;
+    for (int i = 0; i < runeLen; i++) {
+      String c = String.fromCharCode(runes[i]);
       if (ChineseHelper.isChinese(c)) {
         int j = i + 1;
         temp.write(c);
-        while (j < len && (ChineseHelper.isChinese(str[j]))) {
-          temp.write(str[j]);
+        while (j < runeLen && (ChineseHelper.isChinese(String.fromCharCode(runes[j])))) {
+          temp.write(String.fromCharCode(runes[j]));
           j++;
         }
         String pinyin = getPinyin(temp.toString(), separator: pinyinSeparator);
@@ -74,13 +77,14 @@ class PinyinHelper {
     StringBuffer sb = StringBuffer();
     str = ChineseHelper.convertToSimplifiedChinese(str);
 
-    int strLen = str.length;
+    List runes = str.runes.toList();
+    int runeLen = runes.length;
     int i = 0;
-    while (i < strLen) {
-      String subStr = str.substring(i);
+    while (i < runeLen) {
+      String subStr = String.fromCharCode(runes[i]);
       MultiPinyin? node = convertToMultiPinyin(subStr, separator, format);
       if (node == null) {
-        String _char = str[i];
+        String _char = String.fromCharCode(runes[i]);
         if (ChineseHelper.isChinese(_char)) {
           List<String> pinyinArray = convertToPinyinArray(_char, format);
           if (pinyinArray.isNotEmpty) {
@@ -91,7 +95,7 @@ class PinyinHelper {
         } else {
           sb.write(_char);
         }
-        if (i < strLen) {
+        if (i < runeLen) {
           sb.write(separator);
         }
         i++;
@@ -121,13 +125,15 @@ class PinyinHelper {
     if (str.isEmpty) return '';
     StringBuffer sb = StringBuffer();
     str = ChineseHelper.convertToSimplifiedChinese(str);
-    int strLen = str.length;
+
+    List runes = str.runes.toList();
+    int runeLen = runes.length;
     int i = 0;
-    while (i < strLen) {
-      String subStr = str.substring(i);
+    while (i < runeLen) {
+      String subStr = String.fromCharCode(runes[i]);
       MultiPinyin? node = convertToMultiPinyin(subStr, separator, format);
       if (node == null) {
-        String _char = str[i];
+        String _char = String.fromCharCode(runes[i]);
         if (ChineseHelper.isChinese(_char)) {
           List<String> pinyinArray = convertToPinyinArray(_char, format);
           if (pinyinArray.isNotEmpty) {
@@ -140,7 +146,7 @@ class PinyinHelper {
         } else {
           sb.write(_char);
         }
-        if (i < strLen) {
+        if (i < runeLen) {
           sb.write(separator);
         }
         i++;
@@ -162,24 +168,26 @@ class PinyinHelper {
   /// @return 多音字拼音
   static MultiPinyin? convertToMultiPinyin(
       String str, String separator, PinyinFormat format) {
-    if (str.length < minMultiLength) return null;
+    if (str.runes.toList().length < minMultiLength) return null;
     if (maxMultiLength == 0) {
       List<String> keys = multiPinyinMap.keys.toList();
       for (int i = 0, length = keys.length; i < length; i++) {
-        if (keys[i].length > maxMultiLength) {
-          maxMultiLength = keys[i].length;
+        if (keys[i].runes.toList().length > maxMultiLength) {
+          maxMultiLength = keys[i].runes.toList().length;
         }
       }
     }
-    for (int end = minMultiLength, length = str.length;
+
+    final runes = str.runes.toList();
+    for (int end = minMultiLength, length = runes.length;
         (end <= length && end <= maxMultiLength);
         end++) {
-      String subStr = str.substring(0, end);
+      String subStr = String.fromCharCodes(runes.sublist(0, end));
       String? multi = multiPinyinMap[subStr];
       if (multi != null && multi.isNotEmpty) {
-        List<String> str = multi.split(pinyinSeparator);
+        List<String> strList = multi.split(pinyinSeparator);
         StringBuffer sb = StringBuffer();
-        str.forEach((value) {
+        strList.forEach((value) {
           List<String> pinyin = formatPinyin(value, format);
           sb.write(pinyin[0]);
           sb.write(separator);

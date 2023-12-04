@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:lpinyin/src/dict_data.dart';
+import 'package:pinyin/src/dict_data.dart';
 
 /// Pinyin Resource.
 class PinyinResource {

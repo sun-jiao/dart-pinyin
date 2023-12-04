@@ -1,16 +1,34 @@
-import 'package:lpinyin/src/pinyin_resource.dart';
+import 'package:pinyin/src/pinyin_resource.dart';
 
 /// Chinese Helper.
 class ChineseHelper {
-  static const String chineseRegex = "[\\u3007\\u4E00-\\u9FFF\\u3400-\\u4DBF\\uF900-\\uFAFF\\u20000-\\u2A6DF\\u2A700-\\u2B73F\\u2B740-\\u2B81F\\u2B820-\\u2CEAF\\u2CEB0-\\u2EBEF\\u30000-\\u3134F\\u31350-\\u323AF]";
-  static final RegExp chineseRegexp = RegExp(chineseRegex);
-  static final Map<String, String> chineseMap =
-      PinyinResource.getChineseResource();
+  static final Map<String, String> chineseMap = PinyinResource.getChineseResource();
+
+  static bool isChineseCode(int code) =>
+      (code == 0x3007) || // 〇也是汉字
+      (code >= 0x3400 && code <= 0x4DBF) || // Ext+A
+      (code >= 0x4E00 && code <= 0x9FFF) || // CJK Unified Ideographs
+      (code >= 0xF900 && code <= 0xFAFF) || // CJK Compatibility Ideographs
+      (code >= 0x20000 && code <= 0x2A6DF) || // Ext+B
+      (code >= 0x2A700 && code <= 0x2B73F) || // Ext+C
+      (code >= 0x2B740 && code <= 0x2B81F) || // Ext+D
+      (code >= 0x2B820 && code <= 0x2CEAF) || // Ext+E
+      (code >= 0x2CEB0 && code <= 0x2EBEF) || // Ext+F
+      (code >= 0x2EBF0 && code <= 0x2EE5D) || // Ext+I
+      (code >= 0x30000 && code <= 0x3134F) || // Ext+G
+      (code >= 0x31350 && code <= 0x323AF); // Ext+H
 
   /// 判断某个字符是否为汉字
   /// @return 是汉字返回true，否则返回false
   static bool isChinese(String c) {
-    return chineseRegexp.hasMatch(c);
+    try {
+      return isChineseCode(c.runes.first);
+    } catch (e) {
+      return false;
+    }
+    // a better workaround:
+    // return isChineseCode(c.runes.firstOrNull ?? -1);
+    // while avoid using firstOrNull for compatible with Dart 2.
   }
 
   /// 判断某个字符是否为繁体字
@@ -24,7 +42,8 @@ class ChineseHelper {
   /// @param str 字符串
   /// @return 包含汉字返回true，否则返回false
   static bool containsChinese(String str) {
-    for (int i = 0, len = str.length; i < len; i++) {
+    final runes = str.runes;
+    for (int i = 0, len = runes.length; i < len; i++) {
       if (isChinese(str[i])) {
         return true;
       }
@@ -42,7 +61,7 @@ class ChineseHelper {
 
   /// 将单个简体字转换为繁体字
   /// @param c 需要转换的简体字
-  /// @return 转换后的繁字体
+  /// @return 转换后的繁体字
   static String convertCharToTraditionalChinese(String c) {
     if (chineseMap.containsValue(c)) {
       Iterable<MapEntry<String, String>> iterable = chineseMap.entries;
@@ -69,7 +88,7 @@ class ChineseHelper {
 
   /// 将简体字转换为繁体字
   /// @param str 需要转换的简体字
-  /// @return 转换后的繁字体
+  /// @return 转换后的繁体字
   static String convertToTraditionalChinese(String str) {
     StringBuffer sb = StringBuffer();
     for (int i = 0, len = str.length; i < len; i++) {

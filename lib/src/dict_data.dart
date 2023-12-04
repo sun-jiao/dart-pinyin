@@ -9648,6 +9648,7 @@ const List<String> pinyinDict = [
   '吇=zǐ',
   '合=hé,gě',
   '吉=jí',
+  '𱉼=jí',
   '吊=diào',
   '吋=dòu,cùn',
   '同=tóng,tòng',
