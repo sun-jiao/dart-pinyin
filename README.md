@@ -1,19 +1,21 @@
-# lpinyin (Flutter汉字转拼音)
+# dart-pinyin (Dart汉字转拼音package)
 
-lpinyin是一个汉字转拼音的Dart Package. 主要参考Java开源类库[jpinyin](https://github.com/SilenceDut/jpinyin).  
+pinyin是一个汉字转拼音的Dart Package. 主要参考Java开源类库[jpinyin](https://github.com/SilenceDut/jpinyin).  
 ①准确、完善的字库  
 ②拼音转换速度快  
 ③支持多种拼音输出格式：带音标、不带音标、数字表示音标以及拼音首字母输出格式  
 ④支持常见多音字的识别，其中包括词组、成语、地名等  
 ⑤简繁体中文转换  
 ⑥支持添加用户自定义字典  
-⑦支持漢字轉注音 參考自[python-zhuyin](https://github.com/rku1999/python-zhuyin)
+⑦支援漢字轉注音 參考自[python-zhuyin](https://github.com/rku1999/python-zhuyin)，authored by @w830207
+
+This package is originally authored by @Sky24n, @tanghongliang, @duwen and @thl from @flutterchina. We are deeply grateful for their contributions. 
 
 ## Pub
 
 ```yaml
 dependencies:
-  lpinyin: ^2.0.2  #latest version
+  pinyin: ^2.0.2  #latest version
 ```
 
 ## Example
@@ -21,7 +23,7 @@ dependencies:
 ``` dart
 
 // Import package
-import 'package:lpinyin/lpinyin.dart';
+import 'package:pinyin/pinyin.dart';
 
 String text = "天府广场";
 
@@ -54,11 +56,3 @@ ChineseHelper.addChineseDict(dict3);//繁体字字典
 
 ## Changelog
 Please see the [Changelog](CHANGELOG.md) page to know what's recently changed.
-
-## App
-[Moss](https://github.com/Sky24n/Moss)  
-A GitHub client app developed with Flutter, which supports Android iOS Web.  
-Web ：[Flutter Web](https://sky24n.github.io/Sky24n/moss).
-
-|![](https://z3.ax1x.com/2021/04/26/gp1hm6.jpg)|![](https://z3.ax1x.com/2021/04/26/gp1Tte.jpg)|![](https://z3.ax1x.com/2021/04/26/gp17fH.jpg)|
-|:---:|:---:|:---:|

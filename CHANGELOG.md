@@ -1,3 +1,11 @@
+## 3.0.0
+* Add support for characters with a Unicode larger than 0xFFFF.
+* Add support for Zhuyin (or Bopomofo, 注音符号 in Chinese), authored by @w830207.
+* update sdk version.
+* change library name.
+* Abstract logic of methods.
+* Do not add space between non-Chinese characters，and add space between Chinese and non-Chinese characters in short form.
+
 ## 2.0.3
 * TODO: some updates.
 
