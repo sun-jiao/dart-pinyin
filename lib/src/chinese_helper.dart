@@ -2,7 +2,8 @@ import 'package:pinyin/src/pinyin_resource.dart';
 
 /// Chinese Helper.
 class ChineseHelper {
-  static final Map<String, String> chineseMap = PinyinResource.getChineseResource();
+  static final Map<String, String> chineseMap =
+      PinyinResource.getChineseResource();
 
   static bool isChineseCode(int code) =>
       (code == 0x3007) || // 〇也是汉字

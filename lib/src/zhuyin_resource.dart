@@ -2,8 +2,7 @@ import 'dart:collection';
 
 import 'package:pinyin/src/dict_data.dart';
 
-class ZhuyinResource{
-
+class ZhuyinResource {
   /// get Pinyin To Zhuyin Resource.
   static Map<String, String> getPinyinToZhuyinResource() {
     return pinyinToZhuyinDict;
@@ -15,12 +14,11 @@ class ZhuyinResource{
     List<String> values = pinyinToZhuyinDict.values.toList();
     Map<String, String> map = HashMap();
     List<MapEntry<String, String>> mapEntryList = [];
-    for(int i = 0; i < values.length; i++){
+    for (int i = 0; i < values.length; i++) {
       MapEntry<String, String> mapEntry = MapEntry(values[i], keys[i]);
       mapEntryList.add(mapEntry);
     }
     map.addEntries(mapEntryList);
     return map;
   }
-
 }

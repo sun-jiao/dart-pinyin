@@ -1,4 +1,4 @@
-library lpinyin;
+library pinyin;
 
 export 'src/dict_data.dart';
 export 'src/pinyin_format.dart';

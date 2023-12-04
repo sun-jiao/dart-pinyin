@@ -1,3 +1,6 @@
+## 3.0.1
+* minor fixes
+
 ## 3.0.0
 * Add support for characters with a Unicode larger than 0xFFFF.
 * Add support for Zhuyin (or Bopomofo, 注音符号 in Chinese), authored by @w830207.
