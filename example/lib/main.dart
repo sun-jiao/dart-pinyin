@@ -1,11 +1,11 @@
 import 'package:pinyin/pinyin.dart';
 
 void main() {
-  String str = "🇨🇳Chengdu天府广场上有一只东亚石𱉼和一只暗灰鹃𱉐😃";
+  String str = "🇨🇳Chengdu天府广场上有一只东亚石𱉼和一只黄苇𫛚😃";
 
-  PinyinHelper.addPinyinDict(['𱉐=jú,júe']); // not right, just for ext platform test.
+  PinyinHelper.addPinyinDict(['𫛚=jiān,yán']); // not right, just for ext platform test.
 
-  PinyinHelper.addMultiPinyinDict(['暗灰鹃𱉐=àn,huī,juān,júe']);
+  PinyinHelper.addMultiPinyinDict(['黄苇𫛚=huáng,wěi,yán']);
 
   //字符串拼音首字符
   String shortpy = PinyinHelper.getShortPinyin(str); // tfgc

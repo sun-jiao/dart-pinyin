@@ -30,15 +30,23 @@ class PinyinHelper {
     StringBuffer sb = StringBuffer();
     str = ChineseHelper.convertToSimplifiedChinese(str);
 
-    List runes = str.runes.toList();
+    List<int> runes = str.runes.toList();
     int runeLen = runes.length;
     int i = 0;
+    bool prevIsHan = false;
+
     while (i < runeLen) {
-      String subStr = String.fromCharCode(runes[i]);
+      String subStr = String.fromCharCodes(runes.sublist(i));
       MultiPinyin? node = convertToMultiPinyin(subStr, separator, format);
       if (node == null) {
         String _char = String.fromCharCode(runes[i]);
-        if (ChineseHelper.isChinese(_char)) {
+        bool isHan = ChineseHelper.isChinese(_char);
+
+        if ((!isShort && (isHan || prevIsHan)) || (isHan ^ prevIsHan)) {
+          sb.write(separator);
+        }
+
+        if (isHan) {
           List<String> pinyinArray = convertToPinyinArray(_char, format);
           if (pinyinArray.isNotEmpty) {
             if (isShort) {
@@ -52,9 +60,7 @@ class PinyinHelper {
         } else {
           sb.write(_char);
         }
-        if (i < runeLen) {
-          sb.write(separator);
-        }
+        prevIsHan = isHan;
         i++;
       } else {
         sb.write(node.pinyin);
@@ -70,15 +76,37 @@ class PinyinHelper {
   /// @return 首字拼音 (成都 cheng)
   static String getFirstWordPinyin(String str) {
     if (str.isEmpty) return '';
-    String _pinyin = getPinyin(str, separator: pinyinSeparator);
-    return _pinyin.split(pinyinSeparator)[0];
+    str = ChineseHelper.convertToSimplifiedChinese(str);
+
+    List runes = str.runes.toList();
+    int runeLen = runes.length;
+    int i = 0;
+    final format = PinyinFormat.WITHOUT_TONE;
+
+    while (i < runeLen) {
+      String subStr = String.fromCharCode(runes[i]);
+      MultiPinyin? node = convertToMultiPinyin(subStr, ' ', format);
+      if (node == null) {
+        String _char = String.fromCharCode(runes[i]);
+        bool isHan = ChineseHelper.isChinese(_char);
+
+        if (isHan) {
+          List<String> pinyinArray = convertToPinyinArray(_char, format);
+          return pinyinArray[0];
+        }
+      }
+
+      i++;
+    }
+
+    return '';
   }
 
   /// 获取字符串对应拼音的首字母
   /// @param str 需要转换的字符串
   /// @return 对应拼音的首字母 (成都 cd)
   static String getShortPinyin(String str) =>
-      _getPinyin(str, true, '', (sb, char) => null, PinyinFormat.WITHOUT_TONE);
+      _getPinyin(str, true, ' ', (sb, char) => null, PinyinFormat.WITHOUT_TONE);
 
   /// 将字符串转换成相应格式的拼音
   /// @param str 需要转换的字符串
