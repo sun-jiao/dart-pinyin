@@ -2,7 +2,7 @@ import 'package:lpinyin/src/pinyin_resource.dart';
 
 /// Chinese Helper.
 class ChineseHelper {
-  static const String chineseRegex = "[\\u4e00-\\u9fa5]";
+  static const String chineseRegex = "[\\u3007\\u4E00-\\u9FFF\\u3400-\\u4DBF\\uF900-\\uFAFF\\u20000-\\u2A6DF\\u2A700-\\u2B73F\\u2B740-\\u2B81F\\u2B820-\\u2CEAF\\u2CEB0-\\u2EBEF\\u30000-\\u3134F\\u31350-\\u323AF]";
   static final RegExp chineseRegexp = RegExp(chineseRegex);
   static final Map<String, String> chineseMap =
       PinyinResource.getChineseResource();
@@ -10,7 +10,7 @@ class ChineseHelper {
   /// 判断某个字符是否为汉字
   /// @return 是汉字返回true，否则返回false
   static bool isChinese(String c) {
-    return '〇' == c || chineseRegexp.hasMatch(c);
+    return chineseRegexp.hasMatch(c);
   }
 
   /// 判断某个字符是否为繁体字
