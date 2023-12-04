@@ -1,5 +1,6 @@
 import 'package:pinyin/pinyin.dart';
 
+
 void main() {
   String str = "🇨🇳Chengdu天府广场上有一只东亚石𱉼和一只黄苇𫛚😃";
 
@@ -28,6 +29,12 @@ void main() {
   print("pinyin1: " + pinyin1);
   print("pinyin2: " + pinyin2);
   print("pinyin3: " + pinyin3);
+
+  String zhuyin1 = ZhuyinHelper.getZhuyin(str);
+  String zhuyin2 = ZhuyinHelper.getZhuyin(str,separator: "-",format: PinyinFormat.WITH_TONE_NUMBER);
+
+  print("zhuyin1: " + zhuyin1);
+  print("zhuyin2: " + zhuyin2);
 
   String name = "😃";
   String pinyin = PinyinHelper.getPinyin(name, separator: '');
