@@ -1,4 +1,13 @@
-# dart-pinyin (Dart汉字转拼音package)
+# dart-pinyin (Dart package for converting Chinese characters to Pinyin and Zhuyin)
+
+pinyin is a dart package for converting Chinese characters to Pinyin and Zhuyin, with reference to java library [jpinyin](https://github.com/SilenceDut/jpinyin).  
+①Accurate, complete dictionary
+②Swift convertion
+③Multiple formations: without tone, with tone mark, with tone number, abbr  
+④Heteronym support, including words, place names, and chengyus
+⑤Simplified and traditional Chinese convertion
+⑥Custom dictionary support
+⑦Zhuyin (bopomofo) support, with reference to python library[python-zhuyin](https://github.com/rku1999/python-zhuyin)，authored by @w830207
 
 pinyin是一个汉字转拼音的Dart Package. 主要参考Java开源类库[jpinyin](https://github.com/SilenceDut/jpinyin).  
 ①准确、完善的字库  
