@@ -3,9 +3,7 @@ import 'package:pinyin/pinyin.dart';
 void main() {
   String str = "🇨🇳Chengdu天府广场上有一只东亚石𱉼和一只黄苇𫛚😃";
 
-  PinyinHelper.addPinyinDict(
-      ['𫛚=jiān,yán']); // not right, just for ext platform test.
-
+  PinyinHelper.addPinyinDict(['𫛚=jiān,yán']); // not right, just for ext platform test.
   PinyinHelper.addMultiPinyinDict(['黄苇𫛚=huáng,wěi,yán']);
 
   //字符串拼音首字符
@@ -31,8 +29,7 @@ void main() {
   print("pinyin3: " + pinyin3);
 
   String zhuyin1 = ZhuyinHelper.getZhuyin(str);
-  String zhuyin2 = ZhuyinHelper.getZhuyin(str,
-      separator: "-", format: PinyinFormat.WITH_TONE_NUMBER);
+  String zhuyin2 = ZhuyinHelper.getZhuyin(str,separator: "-");
 
   print("zhuyin1: " + zhuyin1);
   print("zhuyin2: " + zhuyin2);
