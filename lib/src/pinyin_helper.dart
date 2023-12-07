@@ -38,15 +38,15 @@ class PinyinHelper {
 
     while (i < runeLen) {
       String subStr = String.fromCharCodes(runes.sublist(i));
+      String _char = String.fromCharCode(runes[i]);
+      bool isHan = ChineseHelper.isChinese(_char);
+
+      if (i != 0 && ((!isShort && (isHan || prevIsHan)) || (isHan ^ prevIsHan))) {
+        sb.write(separator);
+      }
+
       MultiPinyin? node = convertToMultiPinyin(subStr, separator, format);
       if (node == null) {
-        String _char = String.fromCharCode(runes[i]);
-        bool isHan = ChineseHelper.isChinese(_char);
-
-        if ((!isShort && (isHan || prevIsHan)) || (isHan ^ prevIsHan)) {
-          sb.write(separator);
-        }
-
         if (isHan) {
           List<String> pinyinArray = convertToPinyinArray(_char, format);
           if (pinyinArray.isNotEmpty) {
