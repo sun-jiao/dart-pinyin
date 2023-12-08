@@ -1,3 +1,4 @@
+// this dict contains and only contains all URO chars (20902 chars) and "〇"
 const List<String> pinyinDict = [
   '耀=yào',
   '老=lǎo',
@@ -9648,7 +9649,6 @@ const List<String> pinyinDict = [
   '吇=zǐ',
   '合=hé,gě',
   '吉=jí',
-  '𱉼=jí',
   '吊=diào',
   '吋=dòu,cùn',
   '同=tóng,tòng',

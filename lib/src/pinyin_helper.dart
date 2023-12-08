@@ -8,8 +8,7 @@ import 'package:pinyin/src/pinyin_resource.dart';
 /// 汉字转拼音类.
 class PinyinHelper {
   static Map<String, String> pinyinMap = PinyinResource.getPinyinResource();
-  static Map<String, String> multiPinyinMap =
-      PinyinResource.getMultiPinyinResource();
+  static Map<String, String> multiPinyinMap = PinyinResource.getMultiPinyinResource();
 
   /// 拼音分隔符
   static const String pinyinSeparator = ',';
@@ -29,7 +28,7 @@ class PinyinHelper {
   ) {
     if (str.isEmpty) return '';
     StringBuffer sb = StringBuffer();
-    str = ChineseHelper.convertToSimplifiedChinese(str);
+    // str = ChineseHelper.convertToSimplifiedChinese(str); // needless, dict contains all URO characters
 
     List<int> runes = str.runes.toList();
     int runeLen = runes.length;
@@ -45,7 +44,7 @@ class PinyinHelper {
         sb.write(separator);
       }
 
-      MultiPinyin? node = convertToMultiPinyin(subStr, separator, format);
+      MultiPinyin? node = convertToMultiPinyin(subStr, separator, format, isShort: isShort);
       if (node == null) {
         if (isHan) {
           List<String> pinyinArray = convertToPinyinArray(_char, format);
@@ -69,9 +68,7 @@ class PinyinHelper {
       }
     }
     String res = sb.toString();
-    return ((res.endsWith(separator) && separator != '')
-        ? res.substring(0, res.length - 1)
-        : res);
+    return ((res.endsWith(separator) && separator != '') ? res.substring(0, res.length - 1) : res);
   }
 
   /// 获取字符串首字拼音
@@ -79,7 +76,7 @@ class PinyinHelper {
   /// @return 首字拼音 (成都 cheng)
   static String getFirstWordPinyin(String str) {
     if (str.isEmpty) return '';
-    str = ChineseHelper.convertToSimplifiedChinese(str);
+    // str = ChineseHelper.convertToSimplifiedChinese(str); // needless, dict contains all URO characters
 
     List runes = str.runes.toList();
     int runeLen = runes.length;
@@ -121,12 +118,8 @@ class PinyinHelper {
     String separator = ' ',
     PinyinFormat format = PinyinFormat.WITHOUT_TONE,
   }) =>
-      _getPinyin(
-          str,
-          false,
-          separator,
-          (sb, char) => throw PinyinException("Can't convert to pinyin: $char"),
-          format);
+      _getPinyin(str, false, separator,
+          (sb, char) => throw PinyinException("Can't convert to pinyin: $char"), format);
 
   /// 将字符串转换成相应格式的拼音 (不能转换的字拼音默认用' '替代 )
   /// @param str 需要转换的字符串
@@ -150,8 +143,8 @@ class PinyinHelper {
   /// @param separator 拼音分隔符
   /// @param format 拼音格式
   /// @return 多音字拼音
-  static MultiPinyin? convertToMultiPinyin(
-      String str, String separator, PinyinFormat format) {
+  static MultiPinyin? convertToMultiPinyin(String str, String separator, PinyinFormat format,
+      {bool isShort = false}) {
     if (str.runes.toList().length < minMultiLength) return null;
     if (maxMultiLength == 0) {
       List<String> keys = multiPinyinMap.keys.toList();
@@ -173,8 +166,12 @@ class PinyinHelper {
         StringBuffer sb = StringBuffer();
         strList.forEach((value) {
           List<String> pinyin = formatPinyin(value, format);
-          sb.write(pinyin[0]);
-          sb.write(separator);
+          if (isShort) {
+            sb.write(pinyin[0].substring(0, 1));
+          } else {
+            sb.write(pinyin[0]);
+            sb.write(separator);
+          }
         });
         return MultiPinyin(word: subStr, pinyin: sb.toString());
       }
@@ -239,16 +236,13 @@ class PinyinHelper {
       for (int j = originalPinyin.length - 1; j >= 0; j--) {
         int originalChar = originalPinyin.codeUnitAt(j);
         // 搜索带声调的拼音字母，如果存在则替换为对应不带声调的英文字母
-        if (originalChar < 'a'.codeUnitAt(0) ||
-            originalChar > 'z'.codeUnitAt(0)) {
-          int indexInAllMarked =
-              allMarkedVowel.indexOf(String.fromCharCode(originalChar));
+        if (originalChar < 'a'.codeUnitAt(0) || originalChar > 'z'.codeUnitAt(0)) {
+          int indexInAllMarked = allMarkedVowel.indexOf(String.fromCharCode(originalChar));
           int toneNumber = indexInAllMarked % 4 + 1; // 声调数
           double index = (indexInAllMarked - indexInAllMarked % 4) / 4;
           int replaceChar = allUnmarkedVowel.codeUnitAt(index.toInt());
           pinyinArray[i] = originalPinyin.replaceAll(
-                  String.fromCharCode(originalChar),
-                  String.fromCharCode(replaceChar)) +
+                  String.fromCharCode(originalChar), String.fromCharCode(replaceChar)) +
               toneNumber.toString();
           hasMarkedChar = true;
           break;

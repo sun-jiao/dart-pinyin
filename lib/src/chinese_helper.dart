@@ -6,7 +6,7 @@ class ChineseHelper {
       PinyinResource.getChineseResource();
 
   static bool isChineseCode(int code) =>
-      (code == 0x3007) || // 〇也是汉字
+      (code == 0x3007) || // "〇" is also a Chinese character  〇也是汉字
       (code >= 0x3400 && code <= 0x4DBF) || // Ext+A
       (code >= 0x4E00 && code <= 0x9FFF) || // CJK Unified Ideographs
       (code >= 0xF900 && code <= 0xFAFF) || // CJK Compatibility Ideographs
@@ -16,6 +16,7 @@ class ChineseHelper {
       (code >= 0x2B820 && code <= 0x2CEAF) || // Ext+E
       (code >= 0x2CEB0 && code <= 0x2EBEF) || // Ext+F
       (code >= 0x2EBF0 && code <= 0x2EE5D) || // Ext+I
+      (code >= 0x2F800 && code <= 0x2FA1F) || // Compatibility Supplement
       (code >= 0x30000 && code <= 0x3134F) || // Ext+G
       (code >= 0x31350 && code <= 0x323AF); // Ext+H
 
