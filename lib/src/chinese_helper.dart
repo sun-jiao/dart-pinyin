@@ -17,7 +17,7 @@ class ChineseHelper {
       (code >= 0x2B820 && code <= 0x2CEAF) || // Ext+E
       (code >= 0x2CEB0 && code <= 0x2EBEF) || // Ext+F
       (code >= 0x2EBF0 && code <= 0x2EE5D) || // Ext+I
-      (code >= 0x2F800 && code <= 0x2FA1F) || // Compatibility Supplement
+      (code >= 0x2F800 && code <= 0x2FA1F) || // CJK Compatibility Supplement
       (code >= 0x30000 && code <= 0x3134F) || // Ext+G
       (code >= 0x31350 && code <= 0x323AF); // Ext+H
 

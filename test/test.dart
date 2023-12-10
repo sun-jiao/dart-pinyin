@@ -103,8 +103,8 @@ void main() {
     });
   });
 
-  group('custom dict, extension platform chars, and heteronym', () {
-    PinyinHelper.addPinyinDict(['𱉼=jí','𫛚=yán,jiān']);
+  group('extension platform chars', () {
+    PinyinHelper.addPinyinDict(['𱉼=jí','𫛚=yán,jiān']); // 𱉼 is in TIP (第三辅助平面) and 𫛚 is in SIP (表意文字补充平面)
     PinyinHelper.addMultiPinyinDict(['黄苇𫛚=huáng,wěi,jiān']);
 
     final testStr = "东亚石𱉼和黄苇𫛚";
@@ -141,6 +141,47 @@ void main() {
     test('zhuyin, with tone number', () {
       final pinyin = ZhuyinHelper.getZhuyin(testStr, format: PinyinFormat.WITH_TONE_NUMBER);
       expect(pinyin, equals('ㄉㄨㄥ1 ㄧㄚ4 ㄕ2 ㄐㄧ2 ㄏㄜ2 ㄏㄨㄤ2 ㄨㄟ3 ㄐㄧㄢ1'));
+    });
+  });
+
+  group('custom dict and heteronym', () {
+    PinyinHelper.addPinyinDict(['𫠪=yǐ,xià','𫠫=bù,yúan']);
+    PinyinHelper.addMultiPinyinDict(['不不𫠫=bù,bù,yúan']);
+
+    final testStr = "东𫠪不不𫠫";
+    test('abbr', () {
+      final pinyin = PinyinHelper.getShortPinyin(testStr);
+      expect(pinyin, equals('dybby'));
+    });
+
+    test('without tone', () {
+      final pinyin = PinyinHelper.getPinyin(testStr);
+      expect(pinyin, equals('dong yi bu bu yuan'));
+    });
+
+    test('with tone mark', () {
+      final pinyin = PinyinHelper.getPinyin(testStr, format: PinyinFormat.WITH_TONE_MARK);
+      expect(pinyin, equals('dōng yǐ bù bù yúan'));
+    });
+
+    test('with tone number', () {
+      final pinyin = PinyinHelper.getPinyin(testStr, format: PinyinFormat.WITH_TONE_NUMBER);
+      expect(pinyin, equals('dong1 yi3 bu4 bu4 yuan2'));
+    });
+
+    test('zhuyin, without tone', () {
+      final pinyin = ZhuyinHelper.getZhuyin(testStr, format: PinyinFormat.WITHOUT_TONE);
+      expect(pinyin, equals('ㄉㄨㄥ ㄧ ㄅㄨ ㄅㄨ ㄩㄢ'));
+    });
+
+    test('zhuyin, with tone mark', () {
+      final pinyin = ZhuyinHelper.getZhuyin(testStr, format: PinyinFormat.WITH_TONE_MARK);
+      expect(pinyin, equals('ㄉㄨㄥ ㄧˇ ㄅㄨˋ ㄅㄨˋ ㄩㄢˊ'));
+    });
+
+    test('zhuyin, with tone number', () {
+      final pinyin = ZhuyinHelper.getZhuyin(testStr, format: PinyinFormat.WITH_TONE_NUMBER);
+      expect(pinyin, equals('ㄉㄨㄥ1 ㄧ3 ㄅㄨ4 ㄅㄨ4 ㄩㄢ2'));
     });
   });
 }
