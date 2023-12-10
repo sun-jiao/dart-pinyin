@@ -9,7 +9,8 @@ class ChineseHelper {
       (code == 0x3007) || // "〇" is also a Chinese character  〇也是汉字
       (code >= 0x3400 && code <= 0x4DBF) || // Ext+A
       (code >= 0x4E00 && code <= 0x9FFF) || // CJK Unified Ideographs
-      (code >= 0xF900 && code <= 0xFAFF) || // CJK Compatibility Ideographs
+      (code >= 0xF900 && code <= 0xFA6D) || // CJK Compatibility Ideographs - Part 1
+      (code >= 0xFA70 && code <= 0xFAD9) || // CJK Compatibility Ideographs - Part 2
       (code >= 0x20000 && code <= 0x2A6DF) || // Ext+B
       (code >= 0x2A700 && code <= 0x2B73F) || // Ext+C
       (code >= 0x2B740 && code <= 0x2B81F) || // Ext+D
