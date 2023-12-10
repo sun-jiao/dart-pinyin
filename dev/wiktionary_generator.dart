@@ -2,15 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:dio_proxy_adapter/dio_proxy_adapter.dart';
 
 void main() async {
   Dio dio = Dio();
-  dio.useProxy(
-      bool.hasEnvironment('HTTP_PROXY') ?
-      String.fromEnvironment('HTTP_PROXY') : '127.0.0.1:7890');
 
-  var output = File('./dev/temp/pinyin_output_${DateTime.now().toIso8601String()}.csv').openWrite();
+  var output = File('./dev/temp/wikt_output_${DateTime.now().toIso8601String()}.csv').openWrite();
 
   final blocks = [
     MapEntry(0x3400, 0x4DBF),
@@ -60,8 +56,14 @@ Stream<List<dynamic>> query(Dio dio, int start, int end) async* {
 
         var content = jsonMap['query']['pages'][0]['revisions'][0]['slots']['main']['content'];
 
-        var zhSeeMatch = RegExp(r'\{\{zh-see\|([^}]*)(\|[A-Za-z]*\}\}|\}\})').allMatches(content).map((e) => e.group(1)).join(',');
-        var zhPronMatch = RegExp(r'\{\{zh-pron[^\}]*\|m=([^|\n]*)').allMatches(content).map((e) => e.group(1)).join(',');
+        var zhSeeMatch = RegExp(r'\{\{zh-see\|([^}]*)(\|[A-Za-z]*\}\}|\}\})')
+            .allMatches(content)
+            .map((e) => e.group(1))
+            .join(',');
+        var zhPronMatch = RegExp(r'\{\{zh-pron[^\}]*\|m=([^|\n]*)')
+            .allMatches(content)
+            .map((e) => e.group(1))
+            .join(',');
 
         yield [i, char, zhPronMatch, zhSeeMatch];
       } else {
