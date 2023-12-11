@@ -12,13 +12,13 @@ class ChineseHelper {
       (code >= 0xF900 && code <= 0xFA6D) || // CJK Compatibility Ideographs - Part 1
       (code >= 0xFA70 && code <= 0xFAD9) || // CJK Compatibility Ideographs - Part 2
       (code >= 0x20000 && code <= 0x2A6DF) || // Ext+B
-      (code >= 0x2A700 && code <= 0x2B73F) || // Ext+C
-      (code >= 0x2B740 && code <= 0x2B81F) || // Ext+D
-      (code >= 0x2B820 && code <= 0x2CEAF) || // Ext+E
-      (code >= 0x2CEB0 && code <= 0x2EBEF) || // Ext+F
+      (code >= 0x2A700 && code <= 0x2B739) || // Ext+C
+      (code >= 0x2B740 && code <= 0x2B81D) || // Ext+D
+      (code >= 0x2B820 && code <= 0x2CEA1) || // Ext+E
+      (code >= 0x2CEB0 && code <= 0x2EBE0) || // Ext+F
       (code >= 0x2EBF0 && code <= 0x2EE5D) || // Ext+I
       (code >= 0x2F800 && code <= 0x2FA1F) || // CJK Compatibility Supplement
-      (code >= 0x30000 && code <= 0x3134F) || // Ext+G
+      (code >= 0x30000 && code <= 0x3134A) || // Ext+G
       (code >= 0x31350 && code <= 0x323AF); // Ext+H
 
   /// 判断某个字符是否为汉字
