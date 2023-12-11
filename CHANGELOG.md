@@ -1,3 +1,9 @@
+## 3.1.0
+* extend dict and minor fixes
+* fix separator error
+* add testcases
+* add crawler for auto generating pinyin data by scrawling wiktionary and handian
+
 ## 3.0.1
 * minor fixes
 
