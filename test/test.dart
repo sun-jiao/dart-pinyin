@@ -145,7 +145,7 @@ void main() {
   });
 
   group('custom dict and heteronym', () {
-    PinyinHelper.addPinyinDict(['𫠪=yǐ,xià','𫠫=bù,yúan']);
+    PinyinHelper.addPinyinDict(['𫠪=yǐ,xià','𫠫=bù,yúan']); // not right, just for test.
     PinyinHelper.addMultiPinyinDict(['不不𫠫=bù,bù,yúan']);
 
     final testStr = "东𫠪不不𫠫";
