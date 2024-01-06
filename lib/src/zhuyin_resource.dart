@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:pinyin/src/dict_data.dart';
+import '../dict/pinyin_to_zhuyin_dict.dart';
 
 class ZhuyinResource {
   /// get Pinyin To Zhuyin Resource.
