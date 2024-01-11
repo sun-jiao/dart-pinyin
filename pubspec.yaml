@@ -9,6 +9,7 @@ environment:
 # Add regular dependencies here.
 dependencies:
   # path: ^1.8.0
+  sqlite3: ^2.3.0
 
 dev_dependencies:
   dio: ^5.4.0

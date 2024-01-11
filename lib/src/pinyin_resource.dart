@@ -14,7 +14,7 @@ class PinyinResource {
 
   /// get Chinese Resource.
   static Map<String, String> getChineseResource() {
-    return getResource(simpTradDict);
+    return simpTradDict;
   }
 
   /// get Multi Pinyin Resource.
