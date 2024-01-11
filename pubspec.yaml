@@ -12,6 +12,7 @@ dependencies:
   sqlite3: ^2.3.0
 
 dev_dependencies:
+  csv: ^5.1.1
   dio: ^5.4.0
   html: ^0.15.4
   lints: ^2.1.0
