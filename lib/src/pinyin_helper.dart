@@ -1,15 +1,9 @@
 import 'dart:collection';
 
-import 'package:pinyin/src/chinese_helper.dart';
-import 'package:pinyin/src/pinyin_exception.dart';
-import 'package:pinyin/src/pinyin_format.dart';
-import 'package:pinyin/src/pinyin_resource.dart';
+import 'package:pinyin/pinyin.dart';
 
 /// 汉字转拼音类.
 class PinyinHelper {
-  static Map<String, String> pinyinMap = PinyinResource.getPinyinResource();
-  static Map<String, String> multiPinyinMap = PinyinResource.getMultiPinyinResource();
-
   /// 拼音分隔符
   static const String pinyinSeparator = ',';
 
@@ -276,13 +270,25 @@ class PinyinHelper {
   }
 
   /// 添加拼音字典
+  @Deprecated('replaced by addPinyinMap')
   static void addPinyinDict(List<String> list) {
-    pinyinMap.addAll(PinyinResource.getResource(list));
+    addPinyinMap(PinyinResource.getResource(list));
   }
 
   /// 添加多音字字典
+  @Deprecated('replaced by addMultiPinyinMap')
   static void addMultiPinyinDict(List<String> list) {
-    multiPinyinMap.addAll(PinyinResource.getResource(list));
+    addMultiPinyinMap(PinyinResource.getResource(list));
+  }
+
+  /// 添加拼音字典
+  static void addPinyinMap(Map<String, String> map) {
+    pinyinMap.addAll(map);
+  }
+
+  /// 添加多音字字典
+  static void addMultiPinyinMap(Map<String, String> map) {
+    multiPinyinMap.addAll(map);
   }
 }
 

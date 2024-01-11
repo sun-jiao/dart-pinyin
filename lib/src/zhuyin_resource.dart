@@ -1,17 +1,17 @@
 import 'dart:collection';
 
-import '../dict/pinyin_to_zhuyin_dict.dart';
+import '../map/pinyin_to_zhuyin_map.dart';
 
 class ZhuyinResource {
   /// get Pinyin To Zhuyin Resource.
   static Map<String, String> getPinyinToZhuyinResource() {
-    return pinyinToZhuyinDict;
+    return pinyinToZhuyinMap;
   }
 
   /// get Pinyin To Zhuyin Resource.
   static Map<String, String> getZhuyinToPinyinResource() {
-    List<String> keys = pinyinToZhuyinDict.keys.toList();
-    List<String> values = pinyinToZhuyinDict.values.toList();
+    List<String> keys = pinyinToZhuyinMap.keys.toList();
+    List<String> values = pinyinToZhuyinMap.values.toList();
     Map<String, String> map = HashMap();
     List<MapEntry<String, String>> mapEntryList = [];
     for (int i = 0; i < values.length; i++) {

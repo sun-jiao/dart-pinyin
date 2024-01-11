@@ -1,4 +1,4 @@
-Map<String, String> simpTradDict = {
+Map<String, String> simpToTradMap = {
   "㐫": "𠒋",
   "㐵": "𰂔",
   "㐷": "傌",

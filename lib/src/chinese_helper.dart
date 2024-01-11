@@ -1,10 +1,7 @@
-import 'package:pinyin/src/pinyin_resource.dart';
+import 'package:pinyin/pinyin.dart';
 
 /// Chinese Helper.
 class ChineseHelper {
-  static final Map<String, String> chineseMap =
-      PinyinResource.getChineseResource();
-
   static bool isChineseCode(int code) =>
       (code == 0x3007) || // "〇" is also a Chinese character  〇也是汉字
       (code >= 0x3400 && code <= 0x4DBF) || // Ext+A
@@ -38,7 +35,7 @@ class ChineseHelper {
   /// @param c 需要判断的字符
   /// @return 是繁体字返回true，否则返回false
   static bool isTraditionalChinese(String c) {
-    return chineseMap.containsKey(c);
+    return tradToSimpMap.containsKey(c);
   }
 
   /// 判断字符串中是否包含中文
@@ -58,7 +55,7 @@ class ChineseHelper {
   /// @param c 需要转换的繁体字
   /// @return 转换后的简体字
   static String convertCharToSimplifiedChinese(String c) {
-    String? simplifiedChinese = chineseMap[c];
+    String? simplifiedChinese = tradToSimpMap[c];
     return simplifiedChinese ?? c;
   }
 
@@ -66,16 +63,8 @@ class ChineseHelper {
   /// @param c 需要转换的简体字
   /// @return 转换后的繁体字
   static String convertCharToTraditionalChinese(String c) {
-    if (chineseMap.containsValue(c)) {
-      Iterable<MapEntry<String, String>> iterable = chineseMap.entries;
-      for (int i = 0, length = iterable.length; i < length; i++) {
-        MapEntry<String, String> entry = iterable.elementAt(i);
-        if (entry.value == c) {
-          return entry.key;
-        }
-      }
-    }
-    return c;
+    String? traditionalChinese = simpToTradMap[c];
+    return traditionalChinese ?? c;
   }
 
   /// 将繁体字转换为简体字
@@ -101,7 +90,20 @@ class ChineseHelper {
   }
 
   /// 添加繁体字字典
+  static void addSimpToTradMap(Map<String, String> map) {
+    simpToTradMap.addAll(map);
+  }
+
+  /// 添加简体字字典
+  static void addTradToSimpMap(Map<String, String> map) {
+    tradToSimpMap.addAll(map);
+  }
+
+  /// 添加繁体字字典
+  @Deprecated('Replaced by addSimpToTradMap and addTradToSimpMap')
   static void addChineseDict(List<String> list) {
-    chineseMap.addAll(PinyinResource.getResource(list));
+    final map = PinyinResource.getResource(list);
+    addTradToSimpMap(map);
+    addSimpToTradMap(map.map((key, value) => MapEntry(value, key)));
   }
 }

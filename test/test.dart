@@ -2,6 +2,7 @@ import 'package:pinyin/pinyin.dart';
 import 'package:test/test.dart';
 
 void main() {
+/*  Remove dictionary completion check because they're currently auto-generated
   group('dictionary completion check', () {
     PinyinHelper.pinyinMap = PinyinResource.getPinyinResource();
     final keys = PinyinHelper.pinyinMap.keys;
@@ -25,7 +26,7 @@ void main() {
     //     expect(code == 0x3007 || (code >= 0x4e00 && code <= 0x9fa5), isTrue);
     //   }
     // });
-  });
+  });*/
 
   group('Regular conversions', () {
     final testStr = "汉语拼音方案";
@@ -104,8 +105,8 @@ void main() {
   });
 
   group('extension platform chars', () {
-    PinyinHelper.addPinyinDict(['𱉼=jí','𫛚=yán,jiān']); // 𱉼 is in TIP (第三辅助平面) and 𫛚 is in SIP (表意文字补充平面)
-    PinyinHelper.addMultiPinyinDict(['黄苇𫛚=huáng,wěi,jiān']);
+    PinyinHelper.addPinyinMap({'𱉼': 'jí','𫛚': 'yán,jiān'}); // 𱉼 is in TIP (第三辅助平面) and 𫛚 is in SIP (表意文字补充平面)
+    PinyinHelper.addMultiPinyinMap({'黄苇𫛚': 'huáng,wěi,jiān'});
 
     final testStr = "东亚石𱉼和黄苇𫛚";
     test('abbr', () {
@@ -145,8 +146,8 @@ void main() {
   });
 
   group('custom dict and heteronym', () {
-    PinyinHelper.addPinyinDict(['𫠪=yǐ,xià','𫠫=bù,yúan']); // not right, just for test.
-    PinyinHelper.addMultiPinyinDict(['不不𫠫=bù,bù,yúan']);
+    PinyinHelper.addPinyinMap({'𫠪':'yǐ,xià','𫠫': 'bù,yúan'}); // not right, just for test.
+    PinyinHelper.addMultiPinyinMap({'不不𫠫':'bù,bù,yúan'});
 
     final testStr = "东𫠪不不𫠫";
     test('abbr', () {

@@ -1,4 +1,4 @@
-const Map<String, String> pinyinToZhuyinDict = {
+const Map<String, String> pinyinToZhuyinMap = {
   "a": "ㄚ",
   "ai": "ㄞ",
   "an": "ㄢ",

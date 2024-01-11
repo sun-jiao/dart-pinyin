@@ -1,28 +1,31 @@
 import 'dart:collection';
 
-import 'package:pinyin/dict/simp_trad_dict.dart';
-
-import '../dict/multi_pinyin_dict.dart';
-import '../dict/pinyin_dict.dart';
+import '../map/simp_to_trad_map.dart';
+import '../map/multi_pinyin_map.dart';
+import '../map/pinyin_map.dart';
 
 /// Pinyin Resource.
 class PinyinResource {
   /// get Pinyin Resource.
+  @deprecated
   static Map<String, String> getPinyinResource() {
-    return getResource(pinyinDict);
+    return pinyinMap;
   }
 
   /// get Chinese Resource.
+  @deprecated
   static Map<String, String> getChineseResource() {
-    return simpTradDict;
+    return simpToTradMap;
   }
 
   /// get Multi Pinyin Resource.
+  @deprecated
   static Map<String, String> getMultiPinyinResource() {
-    return getResource(multiPinyinDict);
+    return multiPinyinMap;
   }
 
   /// get Resource.
+  @Deprecated('No longer needed.')
   static Map<String, String> getResource(List<String> list) {
     Map<String, String> map = HashMap();
     List<MapEntry<String, String>> mapEntryList = [];
