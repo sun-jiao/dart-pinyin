@@ -2,8 +2,11 @@ import 'package:pinyin/src/pinyin_resource.dart';
 
 /// Chinese Helper.
 class ChineseHelper {
-  static final Map<String, String> chineseMap =
-      PinyinResource.getChineseResource();
+  static final Map<String, String> simpMap =
+      PinyinResource.getSimpResource();
+
+  static final Map<String, String> tradMap =
+      PinyinResource.getTradResource();
 
   static bool isChineseCode(int code) =>
       (code == 0x3007) || // "〇" is also a Chinese character  〇也是汉字
@@ -38,7 +41,7 @@ class ChineseHelper {
   /// @param c 需要判断的字符
   /// @return 是繁体字返回true，否则返回false
   static bool isTraditionalChinese(String c) {
-    return chineseMap.containsKey(c);
+    return simpMap.containsKey(c);
   }
 
   /// 判断字符串中是否包含中文
@@ -58,7 +61,7 @@ class ChineseHelper {
   /// @param c 需要转换的繁体字
   /// @return 转换后的简体字
   static String convertCharToSimplifiedChinese(String c) {
-    String? simplifiedChinese = chineseMap[c];
+    String? simplifiedChinese = simpMap[c];
     return simplifiedChinese ?? c;
   }
 
@@ -66,16 +69,8 @@ class ChineseHelper {
   /// @param c 需要转换的简体字
   /// @return 转换后的繁体字
   static String convertCharToTraditionalChinese(String c) {
-    if (chineseMap.containsValue(c)) {
-      Iterable<MapEntry<String, String>> iterable = chineseMap.entries;
-      for (int i = 0, length = iterable.length; i < length; i++) {
-        MapEntry<String, String> entry = iterable.elementAt(i);
-        if (entry.value == c) {
-          return entry.key;
-        }
-      }
-    }
-    return c;
+    String? trad = tradMap[c];
+    return trad ?? c;
   }
 
   /// 将繁体字转换为简体字
@@ -101,7 +96,16 @@ class ChineseHelper {
   }
 
   /// 添加繁体字字典
+  static void addSimpDict(List<String> list) {
+    simpMap.addAll(PinyinResource.getResource(list));
+  }
+
+  static void addTradDict(List<String> list) {
+    tradMap.addAll(PinyinResource.getResource(list));
+  }
+
   static void addChineseDict(List<String> list) {
-    chineseMap.addAll(PinyinResource.getResource(list));
+    simpMap.addAll(PinyinResource.getResource(list));
+    tradMap.addAll(PinyinResource.getResource(list).map((key, value) => MapEntry(value, key)));
   }
 }

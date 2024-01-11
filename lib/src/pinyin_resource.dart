@@ -4,6 +4,7 @@ import 'package:pinyin/dict/simp_trad_dict.dart';
 
 import '../dict/multi_pinyin_dict.dart';
 import '../dict/pinyin_dict.dart';
+import '../dict/trad_simp_dict.dart';
 
 /// Pinyin Resource.
 class PinyinResource {
@@ -13,8 +14,13 @@ class PinyinResource {
   }
 
   /// get Chinese Resource.
-  static Map<String, String> getChineseResource() {
+  static Map<String, String> getTradResource() {
     return getResource(simpTradDict);
+  }
+
+  /// get Chinese Resource.
+  static Map<String, String> getSimpResource() {
+    return getResource(tradSimpDict);
   }
 
   /// get Multi Pinyin Resource.
