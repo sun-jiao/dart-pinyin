@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:sqlite3/sqlite3.dart';
 
-Database getPinyinDB(String path) {
+Database getPinyinDb(String path) {
   final Database db = sqlite3.open(path);
   final pinyinTable = db.select("select * from sqlite_schema where tbl_name='pinyin'");
   final versionTable = db.select("select * from sqlite_schema where tbl_name='version'");

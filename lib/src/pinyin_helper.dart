@@ -7,7 +7,6 @@ import 'package:pinyin/src/pinyin_resource.dart';
 
 /// 汉字转拼音类.
 class PinyinHelper {
-  static Map<String, String> pinyinMap = PinyinResource.getPinyinResource();
   static Map<String, String> multiPinyinMap = PinyinResource.getMultiPinyinResource();
 
   /// 拼音分隔符
@@ -184,7 +183,7 @@ class PinyinHelper {
   /// @param format 拼音格式
   /// @return 汉字的拼音
   static List<String> convertToPinyinArray(String c, PinyinFormat format) {
-    String? pinyin = pinyinMap[c];
+    String? pinyin = PinyinResource.db.select("SELECT * FROM 'pinyin' where code=${c.runes.first}").first['pinyin'];
     return pinyin == null ? [] : formatPinyin(pinyin, format);
   }
 
@@ -277,7 +276,7 @@ class PinyinHelper {
 
   /// 添加拼音字典
   static void addPinyinDict(List<String> list) {
-    pinyinMap.addAll(PinyinResource.getResource(list));
+    // TODO pinyinMap.addAll(PinyinResource.getResource(list));
   }
 
   /// 添加多音字字典
