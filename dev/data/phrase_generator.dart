@@ -29,6 +29,7 @@ Future<void> main() async {
 
   for (var field in fields) {
     final word = ChineseHelper.convertToSimplifiedChinese(field[0].trim()); // some phrases are mixtures of both trad chars and simp chars
+    if (word.contains('𫛚')) continue; // jian is more widely used, remove them.
     final pinyin = field[1].trim().replaceAll(' ', PinyinHelper.pinyinSeparator);
     final autoPinyin = PinyinHelper.getPinyin(word, format: PinyinFormat.WITH_TONE_MARK, separator: PinyinHelper.pinyinSeparator);
     if (pinyin != autoPinyin) {
