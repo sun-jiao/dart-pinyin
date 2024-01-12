@@ -1,8 +1,11 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:pinyin/pinyin.dart';
+
+const errorWords = ['𫛚', '𱉻𱊊', '陕西', '苜蓿', '石龙子']; // they are basically wrong in large_pinyin.txt
 
 Future<void> main() async {
   // download data from https://github.com/mozillazg/phrase-pinyin-data
@@ -25,15 +28,26 @@ Future<void> main() async {
 
   final output = file.openWrite();
 
+  Map<String, String> theMap = HashMap();
   output.writeln('Map<String, String> phraseMap = {');
 
   for (var field in fields) {
     final word = ChineseHelper.convertToSimplifiedChinese(field[0].trim()); // some phrases are mixtures of both trad chars and simp chars
-    if (word.contains('𫛚')) continue; // jian is more widely used, remove them.
+    if (errorWords.map((e) => word.contains(e)).reduce((a, b) => a || b)) continue;
     final pinyin = field[1].trim().replaceAll(' ', PinyinHelper.pinyinSeparator);
-    final autoPinyin = PinyinHelper.getPinyin(word, format: PinyinFormat.WITH_TONE_MARK, separator: PinyinHelper.pinyinSeparator);
-    if (pinyin != autoPinyin) {
-      output.writeln('  "$word": "$pinyin",');
+    try {
+      final autoPinyin = PinyinHelper.getPinyin(word, format: PinyinFormat.WITH_TONE_MARK, separator: PinyinHelper.pinyinSeparator);
+      if (pinyin != autoPinyin) {
+        if (theMap.containsKey(word)) {
+          if (theMap[word] != pinyin) {
+            print('$word: $pinyin error');
+          }
+        } else {
+          output.writeln('  "$word": "$pinyin",');
+        }
+      }
+    } catch (e, s) {
+      print(e);
     }
   }
 
