@@ -5,10 +5,13 @@ import 'package:pinyin/pinyin.dart';
 Future<void> main() async {
   PinyinResource.initDb('pinyin.sqlite');
   var file = await File('./dev/benchmark/Zhuangzi.txt').readAsString();
-  final start = DateTime.now();
-  final result = PinyinHelper.getPinyin(file,
-      separator: " ", format: PinyinFormat.WITH_TONE_MARK);
-  final end = DateTime.now();
-  print(result);
-  print(end.millisecondsSinceEpoch - start.millisecondsSinceEpoch); // 70
+  for (int i = 0; i < 10; i++) {
+    print('doing the ${i+1} epoch');
+    final start = DateTime.now();
+    PinyinHelper.maxMultiLength = 5;
+    PinyinHelper.getPinyin(file * (i + 1),
+        separator: " ", format: PinyinFormat.WITH_TONE_MARK);
+    final end = DateTime.now();
+    print(end.millisecondsSinceEpoch - start.millisecondsSinceEpoch);
+  }
 }
