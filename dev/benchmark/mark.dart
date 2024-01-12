@@ -4,10 +4,13 @@ import 'package:pinyin/pinyin.dart';
 
 Future<void> main() async {
   var file = await File('./dev/benchmark/Zhuangzi.txt').readAsString();
-  final start = DateTime.now();
-  final result = PinyinHelper.getPinyin(file,
-      separator: " ", format: PinyinFormat.WITH_TONE_MARK);
-  final end = DateTime.now();
-  print(result);
-  print(end.millisecondsSinceEpoch - start.millisecondsSinceEpoch);
+  for (int i = 0; i < 10; i++) {
+    print('doing the ${i+1}× benchmark');
+    final start = DateTime.now();
+    PinyinHelper.maxMultiLength = 5;
+    PinyinHelper.getPinyin(file * (i + 1),
+        separator: " ", format: PinyinFormat.WITH_TONE_MARK);
+    final end = DateTime.now();
+    print(end.millisecondsSinceEpoch - start.millisecondsSinceEpoch);
+  }
 }
