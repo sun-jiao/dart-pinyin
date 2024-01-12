@@ -7,19 +7,19 @@ import '../map/pinyin_map.dart';
 /// Pinyin Resource.
 class PinyinResource {
   /// get Pinyin Resource.
-  @deprecated
+  @Deprecated('No longer needed.')
   static Map<String, String> getPinyinResource() {
     return pinyinMap;
   }
 
   /// get Chinese Resource.
-  @deprecated
+  @Deprecated('No longer needed.')
   static Map<String, String> getChineseResource() {
     return simpToTradMap;
   }
 
   /// get Multi Pinyin Resource.
-  @deprecated
+  @Deprecated('No longer needed.')
   static Map<String, String> getMultiPinyinResource() {
     return phraseMap;
   }
