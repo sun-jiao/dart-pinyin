@@ -56,12 +56,12 @@ class PinyinHelper {
         } else {
           sb.write(_char);
         }
-        prevIsHan = isHan;
         i++;
       } else {
-        sb.write(node.pinyin);
+        sb.write(node.pinyin?.trim());
         i += node.word!.length;
       }
+      prevIsHan = isHan;
     }
     String res = sb.toString();
     return ((res.endsWith(separator) && separator != '') ? res.substring(0, res.length - 1) : res);
