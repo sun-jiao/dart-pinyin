@@ -38,7 +38,7 @@ class PinyinHelper {
   ) {
     if (str.isEmpty) return '';
     StringBuffer sb = StringBuffer();
-    // str = ChineseHelper.convertToSimplifiedChinese(str); // needless, dict contains all URO characters
+    // str = ChineseHelper.convertToSimplifiedChinese(str); // now only needed for phrases.
 
     List<int> runes = str.runes.toList();
     int runeLen = runes.length;
@@ -86,7 +86,7 @@ class PinyinHelper {
   /// @return 首字拼音 (成都 cheng)
   static String getFirstWordPinyin(String str) {
     if (str.isEmpty) return '';
-    // str = ChineseHelper.convertToSimplifiedChinese(str); // needless, dict contains all URO characters
+    // str = ChineseHelper.convertToSimplifiedChinese(str); // now only needed for phrases.
 
     List runes = str.runes.toList();
     int runeLen = runes.length;
@@ -167,6 +167,8 @@ class PinyinHelper {
   static PhrasePinyin? convertToPinyinForPhrase(String str, String separator, PinyinFormat format,
       {bool isShort = false}) {
     if (str.runes.toList().length < minPhraseLength) return null;
+    str = ChineseHelper.convertToSimplifiedChinese(str); // now only needed for phrases.
+
     if (maxPhraseLength == 0) {
       List<String> keys = phraseMap.keys.toList();
       for (int i = 0, length = keys.length; i < length; i++) {
