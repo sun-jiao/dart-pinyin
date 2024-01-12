@@ -65,3 +65,6 @@ ChineseHelper.addChineseDict(dict3);//繁体字字典
 
 ## Changelog
 Please see the [Changelog](CHANGELOG.md) page to know what's recently changed.
+
+## Credits
+Thanks to [Unihan](https://www.unicode.org/Public/15.0.0/ucd/Unihan.zip), Wiktionary, [Handian](https://www.zdic.net/) and [mozillazg/pinyin-data](https://github.com/mozillazg/pinyin-data/blob/master/pinyin.txt).
