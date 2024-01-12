@@ -10,10 +10,24 @@ class PinyinHelper {
   /// 所有带声调的拼音字母
   static const String allMarkedVowel = 'āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ';
   static const String allUnmarkedVowel = 'aeiouv';
-  static int minMultiLength = 2;
-  static int maxMultiLength = phraseMap.keys.reduce((a, b) {
+  static int minPhraseLength = 2;
+  static int maxPhraseLength = phraseMap.keys.reduce((a, b) {
     return a.length > b.length ? a : b;
   }).length;
+
+  @Deprecated('replaced by minPhraseLength')
+  static int get minMultiLength => minPhraseLength;
+  @Deprecated('replaced by minPhraseLength')
+  static set minMultiLength(int length) {
+    minPhraseLength = length;
+  }
+
+  @Deprecated('replaced by maxPhraseLength')
+  static int get maxMultiLength => maxPhraseLength;
+  @Deprecated('replaced by maxPhraseLength')
+  static set maxMultiLength(int length) {
+    maxPhraseLength = length;
+  }
 
   static String _getPinyin(
     String str,
@@ -40,7 +54,7 @@ class PinyinHelper {
         sb.write(separator);
       }
 
-      MultiPinyin? node = convertToMultiPinyin(subStr, separator, format, isShort: isShort);
+      PhrasePinyin? node = convertToPinyinForPhrase(subStr, separator, format, isShort: isShort);
       if (node == null) {
         if (isHan) {
           List<String> pinyinArray = convertToPinyinArray(_char, format);
@@ -81,7 +95,7 @@ class PinyinHelper {
 
     while (i < runeLen) {
       String subStr = String.fromCharCode(runes[i]);
-      MultiPinyin? node = convertToMultiPinyin(subStr, ' ', format);
+      PhrasePinyin? node = convertToPinyinForPhrase(subStr, ' ', format);
       if (node == null) {
         String _char = String.fromCharCode(runes[i]);
         bool isHan = ChineseHelper.isChinese(_char);
@@ -134,31 +148,42 @@ class PinyinHelper {
         print("### Can't convert to pinyin: $char , defPinyin: $defPinyin");
       }, format);
 
-  /// 获取多音字拼音
+  /// 获取词组拼音
   /// @param str 需要转换的字符串
   /// @param separator 拼音分隔符
   /// @param format 拼音格式
-  /// @return 多音字拼音
-  static MultiPinyin? convertToMultiPinyin(String str, String separator, PinyinFormat format,
+  /// @return 词组拼音
+  @Deprecated('replaced by convertToPinyinForPhrase')
+  static PhrasePinyin? convertToMultiPinyin(String str, String separator, PinyinFormat format,
       {bool isShort = false}) {
-    if (str.runes.toList().length < minMultiLength) return null;
-    if (maxMultiLength == 0) {
+    return convertToPinyinForPhrase(str, separator, format, isShort: isShort);
+  }
+  
+  /// 获取词组拼音
+  /// @param str 需要转换的字符串
+  /// @param separator 拼音分隔符
+  /// @param format 拼音格式
+  /// @return 词组拼音
+  static PhrasePinyin? convertToPinyinForPhrase(String str, String separator, PinyinFormat format,
+      {bool isShort = false}) {
+    if (str.runes.toList().length < minPhraseLength) return null;
+    if (maxPhraseLength == 0) {
       List<String> keys = phraseMap.keys.toList();
       for (int i = 0, length = keys.length; i < length; i++) {
-        if (keys[i].runes.toList().length > maxMultiLength) {
-          maxMultiLength = keys[i].runes.toList().length;
+        if (keys[i].runes.toList().length > maxPhraseLength) {
+          maxPhraseLength = keys[i].runes.toList().length;
         }
       }
     }
 
     final runes = str.runes.toList();
-    for (int end = minMultiLength, length = runes.length;
-        (end <= length && end <= maxMultiLength);
+    for (int end = minPhraseLength, length = runes.length;
+        (end <= length && end <= maxPhraseLength);
         end++) {
       String subStr = String.fromCharCodes(runes.sublist(0, end));
-      String? multi = phraseMap[subStr];
-      if (multi != null && multi.isNotEmpty) {
-        List<String> strList = multi.split(pinyinSeparator);
+      String? phraseValue = phraseMap[subStr];
+      if (phraseValue != null && phraseValue.isNotEmpty) {
+        List<String> strList = phraseValue.split(pinyinSeparator);
         StringBuffer sb = StringBuffer();
         strList.forEach((value) {
           List<String> pinyin = formatPinyin(value, format);
@@ -169,7 +194,7 @@ class PinyinHelper {
             sb.write(separator);
           }
         });
-        return MultiPinyin(word: subStr, pinyin: sb.toString());
+        return PhrasePinyin(word: subStr, pinyin: sb.toString());
       }
     }
     return null;
@@ -278,7 +303,7 @@ class PinyinHelper {
   }
 
   /// 添加多音字字典
-  @Deprecated('replaced by addMultiPinyinMap')
+  @Deprecated('replaced by addPhrasePinyinMap')
   static void addMultiPinyinDict(List<String> list) {
     addPhraseMap(PinyinResource.getResource(list));
   }
@@ -294,12 +319,27 @@ class PinyinHelper {
   }
 }
 
+@Deprecated('replaced by PhrasePinyin')
+class MultiPinyin extends PhrasePinyin {
+  @Deprecated('replaced by PhrasePinyin')
+  String? word;
+  @Deprecated('replaced by PhrasePinyin')
+  String? pinyin;
+
+  @Deprecated('replaced by PhrasePinyin')
+  MultiPinyin({this.word, this.pinyin});
+
+  @override
+  @Deprecated('replaced by PhrasePinyin')
+  String toString() => super.toString();
+}
+
 /// 多音字
-class MultiPinyin {
+class PhrasePinyin {
   String? word;
   String? pinyin;
 
-  MultiPinyin({this.word, this.pinyin});
+  PhrasePinyin({this.word, this.pinyin});
 
   @override
   String toString() {
