@@ -1,7 +1,7 @@
 import 'dart:collection';
 
+import '../map/phrase_map.dart';
 import '../map/simp_to_trad_map.dart';
-import '../map/multi_pinyin_map.dart';
 import '../map/pinyin_map.dart';
 
 /// Pinyin Resource.
@@ -21,7 +21,7 @@ class PinyinResource {
   /// get Multi Pinyin Resource.
   @deprecated
   static Map<String, String> getMultiPinyinResource() {
-    return multiPinyinMap;
+    return phraseMap;
   }
 
   /// get Resource.

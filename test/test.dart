@@ -106,7 +106,7 @@ void main() {
 
   group('extension platform chars', () {
     PinyinHelper.addPinyinMap({'𱉼': 'jí','𫛚': 'yán,jiān'}); // 𱉼 is in TIP (第三辅助平面) and 𫛚 is in SIP (表意文字补充平面)
-    PinyinHelper.addMultiPinyinMap({'黄苇𫛚': 'huáng,wěi,jiān'});
+    PinyinHelper.addPhraseMap({'黄苇𫛚': 'huáng,wěi,jiān'});
 
     final testStr = "东亚石𱉼和黄苇𫛚";
     test('abbr', () {
@@ -147,7 +147,7 @@ void main() {
 
   group('custom dict and heteronym', () {
     PinyinHelper.addPinyinMap({'𫠪':'yǐ,xià','𫠫': 'bù,yúan'}); // not right, just for test.
-    PinyinHelper.addMultiPinyinMap({'不不𫠫':'bù,bù,yúan'});
+    PinyinHelper.addPhraseMap({'不不𫠫':'bù,bù,yúan'});
 
     final testStr = "东𫠪不不𫠫";
     test('abbr', () {

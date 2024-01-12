@@ -23,4 +23,5 @@ local.properties
 /.idea/libraries
 
 dev/temp/
+dev/data/large_pinyin.txt
 *.sqlite

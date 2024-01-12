@@ -11,7 +11,9 @@ class PinyinHelper {
   static const String allMarkedVowel = 'āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ';
   static const String allUnmarkedVowel = 'aeiouv';
   static int minMultiLength = 2;
-  static int maxMultiLength = 0;
+  static int maxMultiLength = phraseMap.keys.reduce((a, b) {
+    return a.length > b.length ? a : b;
+  }).length;
 
   static String _getPinyin(
     String str,
@@ -141,7 +143,7 @@ class PinyinHelper {
       {bool isShort = false}) {
     if (str.runes.toList().length < minMultiLength) return null;
     if (maxMultiLength == 0) {
-      List<String> keys = multiPinyinMap.keys.toList();
+      List<String> keys = phraseMap.keys.toList();
       for (int i = 0, length = keys.length; i < length; i++) {
         if (keys[i].runes.toList().length > maxMultiLength) {
           maxMultiLength = keys[i].runes.toList().length;
@@ -154,7 +156,7 @@ class PinyinHelper {
         (end <= length && end <= maxMultiLength);
         end++) {
       String subStr = String.fromCharCodes(runes.sublist(0, end));
-      String? multi = multiPinyinMap[subStr];
+      String? multi = phraseMap[subStr];
       if (multi != null && multi.isNotEmpty) {
         List<String> strList = multi.split(pinyinSeparator);
         StringBuffer sb = StringBuffer();
@@ -278,7 +280,7 @@ class PinyinHelper {
   /// 添加多音字字典
   @Deprecated('replaced by addMultiPinyinMap')
   static void addMultiPinyinDict(List<String> list) {
-    addMultiPinyinMap(PinyinResource.getResource(list));
+    addPhraseMap(PinyinResource.getResource(list));
   }
 
   /// 添加拼音字典
@@ -287,8 +289,8 @@ class PinyinHelper {
   }
 
   /// 添加多音字字典
-  static void addMultiPinyinMap(Map<String, String> map) {
-    multiPinyinMap.addAll(map);
+  static void addPhraseMap(Map<String, String> map) {
+    phraseMap.addAll(map);
   }
 }
 
