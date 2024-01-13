@@ -43,6 +43,7 @@ Future<void> main() async {
             print('$word: $pinyin error');
           }
         } else {
+          theMap[word] = pinyin;
           output.writeln('  "$word": "$pinyin",');
         }
       }

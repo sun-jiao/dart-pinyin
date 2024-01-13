@@ -49154,6 +49154,7 @@ Map<String, String> pinyinMap = {
   "𨗂": "jǐ,jī",
   "𨗃": "jìn",
   "𨗄": "lín",
+  "𨗅": "suì",
   "𨗆": "qiān",
   "𨗇": "qiān",
   "𨗋": "jiù",
