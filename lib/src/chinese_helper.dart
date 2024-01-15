@@ -75,36 +75,17 @@ class ChineseHelper {
   /// 将繁体字转换为简体字
   /// @param str 需要转换的繁体字
   /// @return 转换后的简体字
-  static String convertToSimplifiedChinese(String str) {
-    StringBuffer sb = StringBuffer();
-    final runes = str.runes.toList();
-    int i = 0;
-    while (i < runes.length) {
-      String subStr = String.fromCharCodes(runes.sublist(i));
-      String _char = String.fromCharCode(runes[i]);
-      bool isHan = ChineseHelper.isChinese(_char);
-
-      PhraseSTConvert? node = convertForPhrase(subStr, phraseMapT2S);
-      if (node == null) {
-        if (isHan) {
-          sb.write(convertCharToSimplifiedChinese(String.fromCharCode(runes[i])));
-        } else {
-          sb.write(_char);
-        }
-        i++;
-      } else {
-        sb.write(node.converted?.trim());
-        i += node.word!.runes.length;
-      }
-    }
-
-    return sb.toString();
-  }
+  static String convertToSimplifiedChinese(String str) =>
+      _stringConvert(str, phraseMapT2S, convertCharToSimplifiedChinese);
 
   /// 将简体字转换为繁体字
   /// @param str 需要转换的简体字
   /// @return 转换后的繁体字
-  static String convertToTraditionalChinese(String str) {
+  static String convertToTraditionalChinese(String str) =>
+      _stringConvert(str, phraseMapS2T, convertCharToTraditionalChinese);
+
+  static String _stringConvert(String str, Map<String, String> dict,
+      String Function(String) singleCharConvert) {
     StringBuffer sb = StringBuffer();
     final runes = str.runes.toList();
     int i = 0;
@@ -113,10 +94,10 @@ class ChineseHelper {
       String _char = String.fromCharCode(runes[i]);
       bool isHan = ChineseHelper.isChinese(_char);
 
-      PhraseSTConvert? node = convertForPhrase(subStr, phraseMapS2T);
+      PhraseSTConvert? node = convertForPhrase(subStr, dict);
       if (node == null) {
         if (isHan) {
-          sb.write(convertCharToTraditionalChinese(String.fromCharCode(runes[i])));
+          sb.write(singleCharConvert.call(String.fromCharCode(runes[i])));
         } else {
           sb.write(_char);
         }
