@@ -12,8 +12,8 @@ class PinyinHelper {
   static const String allUnmarkedVowel = 'aeiouv';
   static int minPhraseLength = 2;
   static int maxPhraseLength = phraseMap.keys.reduce((a, b) {
-    return a.length > b.length ? a : b;
-  }).length;
+    return a.runes.length > b.runes.length ? a : b;
+  }).runes.length;
 
   @Deprecated('replaced by minPhraseLength')
   static int get minMultiLength => minPhraseLength;
@@ -73,12 +73,12 @@ class PinyinHelper {
         i++;
       } else {
         sb.write(node.pinyin?.trim());
-        i += node.word!.length;
+        i += node.word!.runes.length;
       }
       prevIsHan = isHan;
     }
     String res = sb.toString();
-    return ((res.endsWith(separator) && separator != '') ? res.substring(0, res.length - 1) : res);
+    return ((res.endsWith(separator) && separator != '') ? res.substring(0, res.runes.length - 1) : res);
   }
 
   /// 获取字符串首字拼音
