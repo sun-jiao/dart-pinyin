@@ -2,6 +2,9 @@ import 'package:pinyin/pinyin.dart';
 
 /// Chinese Helper.
 class ChineseHelper {
+  static int minPhraseLength = 2;
+  static int? maxPhraseLength;
+
   static bool isChineseCode(int code) =>
       (code == 0x3007) || // "〇" is also a Chinese character  〇也是汉字
       (code >= 0x3400 && code <= 0x4DBF) || // Ext+A
@@ -72,9 +75,27 @@ class ChineseHelper {
   /// @return 转换后的简体字
   static String convertToSimplifiedChinese(String str) {
     StringBuffer sb = StringBuffer();
-    for (int i = 0, len = str.length; i < len; i++) {
-      sb.write(convertCharToSimplifiedChinese(str[i]));
+    final runes = str.runes.toList();
+    int i = 0;
+    while (i < runes.length) {
+      String subStr = String.fromCharCodes(runes.sublist(i));
+      String _char = String.fromCharCode(runes[i]);
+      bool isHan = ChineseHelper.isChinese(_char);
+
+      PhraseSTConvert? node = convertForPhrase(subStr, phraseMapT2S);
+      if (node == null) {
+        if (isHan) {
+          sb.write(convertCharToSimplifiedChinese(String.fromCharCode(runes[i])));
+        } else {
+          sb.write(_char);
+        }
+        i++;
+      } else {
+        sb.write(node.converted?.trim());
+        i += node.word!.runes.length;
+      }
     }
+
     return sb.toString();
   }
 
@@ -83,10 +104,61 @@ class ChineseHelper {
   /// @return 转换后的繁体字
   static String convertToTraditionalChinese(String str) {
     StringBuffer sb = StringBuffer();
-    for (int i = 0, len = str.length; i < len; i++) {
-      sb.write(convertCharToTraditionalChinese(str[i]));
+    final runes = str.runes.toList();
+    int i = 0;
+    while (i < runes.length) {
+      String subStr = String.fromCharCodes(runes.sublist(i));
+      String _char = String.fromCharCode(runes[i]);
+      bool isHan = ChineseHelper.isChinese(_char);
+
+      PhraseSTConvert? node = convertForPhrase(subStr, phraseMapS2T);
+      if (node == null) {
+        if (isHan) {
+          sb.write(convertCharToTraditionalChinese(String.fromCharCode(runes[i])));
+        } else {
+          sb.write(_char);
+        }
+        i++;
+      } else {
+        sb.write(node.converted?.trim());
+        i += node.word!.runes.length;
+      }
     }
+
     return sb.toString();
+  }
+
+  /// 词组转换
+  /// @param str 需要转换的字符串
+  /// @param dict 转换词典
+  /// @return 转换结果
+  static PhraseSTConvert? convertForPhrase(String str, Map<String, String> dict) {
+    int _maxPhraseLength = maxPhraseLength ?? dict.keys.reduce((a, b) {
+      return a.runes.length > b.runes.length ? a : b;
+    }).runes.length;
+
+    if (str.runes.toList().length < minPhraseLength) return null;
+
+    if (_maxPhraseLength == 0) {
+      List<String> keys = dict.keys.toList();
+      for (int i = 0, length = keys.length; i < length; i++) {
+        if (keys[i].runes.toList().length > _maxPhraseLength) {
+          _maxPhraseLength = keys[i].runes.toList().length;
+        }
+      }
+    }
+
+    final runes = str.runes.toList();
+    for (int end = minPhraseLength, length = runes.length;
+        (end <= length && end <= _maxPhraseLength);
+        end++) {
+      String subStr = String.fromCharCodes(runes.sublist(0, end));
+      String? phraseConverted = dict[subStr];
+      if (phraseConverted != null && phraseConverted.isNotEmpty) {
+        return PhraseSTConvert(word: subStr, converted: phraseConverted);
+      }
+    }
+    return null;
   }
 
   /// 添加繁体字字典
@@ -105,5 +177,22 @@ class ChineseHelper {
     final map = PinyinResource.getResource(list);
     addTradToSimpMap(map);
     addSimpToTradMap(map.map((key, value) => MapEntry(value, key)));
+  }
+}
+
+/// 多音字
+class PhraseSTConvert {
+  String? word;
+  String? converted;
+
+  PhraseSTConvert({this.word, this.converted});
+
+  @override
+  String toString() {
+    StringBuffer sb = StringBuffer('{');
+    sb.write("\"word\":\"$word\"");
+    sb.write(",\"converted\":\"$converted\"");
+    sb.write('}');
+    return sb.toString();
   }
 }

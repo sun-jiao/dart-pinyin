@@ -25,3 +25,5 @@ local.properties
 dev/temp/
 dev/data/large_pinyin.txt
 *.sqlite
+dev/data/STPhrases.txt
+dev/data/TSPhrases.txt
