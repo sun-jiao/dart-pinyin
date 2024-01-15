@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:pinyin/pinyin.dart';
 
 /// Chinese Helper.
@@ -149,9 +151,9 @@ class ChineseHelper {
     }
 
     final runes = str.runes.toList();
-    for (int end = minPhraseLength, length = runes.length;
-        (end <= length && end <= _maxPhraseLength);
-        end++) {
+    for (int end = min(_maxPhraseLength, runes.length);
+    (end >= minPhraseLength);
+    end--) {
       String subStr = String.fromCharCodes(runes.sublist(0, end));
       String? phraseConverted = dict[subStr];
       if (phraseConverted != null && phraseConverted.isNotEmpty) {

@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:pinyin/pinyin.dart';
 
@@ -179,9 +180,9 @@ class PinyinHelper {
     }
 
     final runes = str.runes.toList();
-    for (int end = minPhraseLength, length = runes.length;
-        (end <= length && end <= maxPhraseLength);
-        end++) {
+    for (int end = min(maxPhraseLength, runes.length);
+        (end >= minPhraseLength);
+        end--) {
       String subStr = String.fromCharCodes(runes.sublist(0, end));
       String? phraseValue = phraseMap[subStr];
       if (phraseValue != null && phraseValue.isNotEmpty) {
