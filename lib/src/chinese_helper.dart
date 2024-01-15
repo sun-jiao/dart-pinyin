@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:pinyin/pinyin.dart';
+import 'package:pinyin/src/phrase_converter.dart';
 
 /// Chinese Helper.
 class ChineseHelper {
@@ -103,7 +104,7 @@ class ChineseHelper {
         }
         i++;
       } else {
-        sb.write(node.converted?.trim());
+        sb.write(node.result?.trim());
         i += node.word!.runes.length;
       }
     }
@@ -120,7 +121,9 @@ class ChineseHelper {
       return a.runes.length > b.runes.length ? a : b;
     }).runes.length;
 
-    if (str.runes.toList().length < minPhraseLength) return null;
+    final runes = str.runes.toList();
+
+    if (runes.length < minPhraseLength) return null;
 
     if (_maxPhraseLength == 0) {
       List<String> keys = dict.keys.toList();
@@ -131,14 +134,13 @@ class ChineseHelper {
       }
     }
 
-    final runes = str.runes.toList();
     for (int end = min(_maxPhraseLength, runes.length);
     (end >= minPhraseLength);
     end--) {
       String subStr = String.fromCharCodes(runes.sublist(0, end));
-      String? phraseConverted = dict[subStr];
-      if (phraseConverted != null && phraseConverted.isNotEmpty) {
-        return PhraseSTConvert(word: subStr, converted: phraseConverted);
+      String? result = dict[subStr];
+      if (result != null && result.isNotEmpty) {
+        return PhraseSTConvert(word: subStr, result: result);
       }
     }
     return null;
@@ -160,22 +162,5 @@ class ChineseHelper {
     final map = PinyinResource.getResource(list);
     addTradToSimpMap(map);
     addSimpToTradMap(map.map((key, value) => MapEntry(value, key)));
-  }
-}
-
-/// 多音字
-class PhraseSTConvert {
-  String? word;
-  String? converted;
-
-  PhraseSTConvert({this.word, this.converted});
-
-  @override
-  String toString() {
-    StringBuffer sb = StringBuffer('{');
-    sb.write("\"word\":\"$word\"");
-    sb.write(",\"converted\":\"$converted\"");
-    sb.write('}');
-    return sb.toString();
   }
 }

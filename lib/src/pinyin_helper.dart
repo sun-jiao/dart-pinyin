@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:pinyin/pinyin.dart';
+import 'package:pinyin/src/phrase_converter.dart';
 
 /// 汉字转拼音类.
 class PinyinHelper {
@@ -167,6 +168,8 @@ class PinyinHelper {
   /// @return 词组拼音
   static PhrasePinyin? convertToPinyinForPhrase(String str, String separator, PinyinFormat format,
       {bool isShort = false}) {
+    final runes = str.runes.toList();
+
     if (str.runes.toList().length < minPhraseLength) return null;
     str = ChineseHelper.convertToSimplifiedChinese(str); // now only needed for phrases.
 
@@ -179,7 +182,6 @@ class PinyinHelper {
       }
     }
 
-    final runes = str.runes.toList();
     for (int end = min(maxPhraseLength, runes.length);
         (end >= minPhraseLength);
         end--) {
@@ -319,37 +321,5 @@ class PinyinHelper {
   /// 添加多音字字典
   static void addPhraseMap(Map<String, String> map) {
     phraseMap.addAll(map);
-  }
-}
-
-@Deprecated('replaced by PhrasePinyin')
-class MultiPinyin extends PhrasePinyin {
-  @Deprecated('replaced by PhrasePinyin')
-  String? word;
-  @Deprecated('replaced by PhrasePinyin')
-  String? pinyin;
-
-  @Deprecated('replaced by PhrasePinyin')
-  MultiPinyin({this.word, this.pinyin});
-
-  @override
-  @Deprecated('replaced by PhrasePinyin')
-  String toString() => super.toString();
-}
-
-/// 多音字
-class PhrasePinyin {
-  String? word;
-  String? pinyin;
-
-  PhrasePinyin({this.word, this.pinyin});
-
-  @override
-  String toString() {
-    StringBuffer sb = StringBuffer('{');
-    sb.write("\"word\":\"$word\"");
-    sb.write(",\"pinyin\":\"$pinyin\"");
-    sb.write('}');
-    return sb.toString();
   }
 }
