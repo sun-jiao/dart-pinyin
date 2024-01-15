@@ -11,3 +11,4 @@
 | 9        | 196689 | 196461 |   220183    |
 | 10       | 243050 | 238756 |   274932    |
 
+Obviously, using `Map` provides the best performance. 
