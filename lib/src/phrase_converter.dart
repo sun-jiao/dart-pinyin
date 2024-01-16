@@ -1,12 +1,19 @@
 @Deprecated('replaced by PhrasePinyin')
-class MultiPinyin extends PhrasePinyin {
+class MultiPinyin extends PhraseConvert {
   @Deprecated('replaced by PhrasePinyin')
   String? word;
   @Deprecated('replaced by PhrasePinyin')
-  String? pinyin;
+  String? result;
+
+  @Deprecated('replaced by result')
+  String? get pinyin => result;
+  @Deprecated('replaced by result')
+  set pinyin(String? p) {
+    result = p;
+  }
 
   @Deprecated('replaced by PhrasePinyin')
-  MultiPinyin({this.word, this.pinyin});
+  MultiPinyin({this.word, String? pinyin}):result=pinyin;
 
   @override
   @Deprecated('replaced by PhrasePinyin')
@@ -14,34 +21,17 @@ class MultiPinyin extends PhrasePinyin {
 }
 
 /// 多音字
-class PhrasePinyin {
-  String? word;
-  String? pinyin;
-
-  PhrasePinyin({this.word, this.pinyin});
-
-  @override
-  String toString() {
-    StringBuffer sb = StringBuffer('{');
-    sb.write("\"word\":\"$word\"");
-    sb.write(",\"pinyin\":\"$pinyin\"");
-    sb.write('}');
-    return sb.toString();
-  }
-}
-
-/// 多音字
-class PhraseSTConvert {
+class PhraseConvert {
   String? word;
   String? result;
 
-  PhraseSTConvert({this.word, this.result});
+  PhraseConvert({this.word, this.result});
 
   @override
   String toString() {
     StringBuffer sb = StringBuffer('{');
     sb.write("\"word\":\"$word\"");
-    sb.write(",\"converted\":\"$result\"");
+    sb.write(",\"result\":\"$result\"");
     sb.write('}');
     return sb.toString();
   }

@@ -95,7 +95,7 @@ class ChineseHelper {
       String _char = String.fromCharCode(runes[i]);
       bool isHan = ChineseHelper.isChinese(_char);
 
-      PhraseSTConvert? node = convertForPhrase(subStr, dict);
+      PhraseConvert? node = convertForPhrase(subStr, dict);
       if (node == null) {
         if (isHan) {
           sb.write(singleCharConvert.call(String.fromCharCode(runes[i])));
@@ -116,7 +116,7 @@ class ChineseHelper {
   /// @param str 需要转换的字符串
   /// @param dict 转换词典
   /// @return 转换结果
-  static PhraseSTConvert? convertForPhrase(String str, Map<String, String> dict) {
+  static PhraseConvert? convertForPhrase(String str, Map<String, String> dict) {
     int _maxPhraseLength = maxPhraseLength ?? dict.keys.reduce((a, b) {
       return a.runes.length > b.runes.length ? a : b;
     }).runes.length;
@@ -140,7 +140,7 @@ class ChineseHelper {
       String subStr = String.fromCharCodes(runes.sublist(0, end));
       String? result = dict[subStr];
       if (result != null && result.isNotEmpty) {
-        return PhraseSTConvert(word: subStr, result: result);
+        return PhraseConvert(word: subStr, result: result);
       }
     }
     return null;
