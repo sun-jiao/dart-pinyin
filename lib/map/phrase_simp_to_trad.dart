@@ -49058,3 +49058,5 @@ Map<String, String> phraseMapS2T = {
   "龟卜": "龜卜",
   "龟鉴": "龜鑑",
 };
+int minPhraseLengthS2T = 2;
+int maxPhraseLengthS2T = 16;

@@ -1,11 +1,9 @@
-import 'dart:math';
-
 import 'package:pinyin/pinyin.dart';
 import 'package:pinyin/src/phrase_converter.dart';
 
 /// Chinese Helper.
 class ChineseHelper {
-  static int minPhraseLength = 2;
+  static int? minPhraseLength;
   static int? maxPhraseLength;
 
   static bool isChineseCode(int code) =>
@@ -77,16 +75,16 @@ class ChineseHelper {
   /// @param str 需要转换的繁体字
   /// @return 转换后的简体字
   static String convertToSimplifiedChinese(String str) =>
-      _stringConvert(str, phraseMapT2S, convertCharToSimplifiedChinese);
+      _stringConvert(str, phraseMapT2S, convertCharToSimplifiedChinese, minPhraseLengthT2S, maxPhraseLengthT2S);
 
   /// 将简体字转换为繁体字
   /// @param str 需要转换的简体字
   /// @return 转换后的繁体字
   static String convertToTraditionalChinese(String str) =>
-      _stringConvert(str, phraseMapS2T, convertCharToTraditionalChinese);
+      _stringConvert(str, phraseMapS2T, convertCharToTraditionalChinese, minPhraseLengthS2T, maxPhraseLengthS2T);
 
-  static String _stringConvert(String str, Map<String, String> dict,
-      String Function(String) singleCharConvert) {
+  static String _stringConvert(
+      String str, Map<String, String> dict, String Function(String) singleCharConvert, int min, int max) {
     StringBuffer sb = StringBuffer();
     final runes = str.runes.toList();
     int i = 0;
@@ -95,7 +93,7 @@ class ChineseHelper {
       String _char = String.fromCharCode(runes[i]);
       bool isHan = ChineseHelper.isChinese(_char);
 
-      PhraseConvert? node = convertForPhrase(subStr, dict);
+      PhraseConvert? node = stConvertForPhrase(subStr, dict, min, max);
       if (node == null) {
         if (isHan) {
           sb.write(singleCharConvert.call(String.fromCharCode(runes[i])));
@@ -116,35 +114,16 @@ class ChineseHelper {
   /// @param str 需要转换的字符串
   /// @param dict 转换词典
   /// @return 转换结果
-  static PhraseConvert? convertForPhrase(String str, Map<String, String> dict) {
-    int _maxPhraseLength = maxPhraseLength ?? dict.keys.reduce((a, b) {
-      return a.runes.length > b.runes.length ? a : b;
-    }).runes.length;
-
-    final runes = str.runes.toList();
-
-    if (runes.length < minPhraseLength) return null;
-
-    if (_maxPhraseLength == 0) {
-      List<String> keys = dict.keys.toList();
-      for (int i = 0, length = keys.length; i < length; i++) {
-        if (keys[i].runes.toList().length > _maxPhraseLength) {
-          _maxPhraseLength = keys[i].runes.toList().length;
-        }
-      }
-    }
-
-    for (int end = min(_maxPhraseLength, runes.length);
-    (end >= minPhraseLength);
-    end--) {
-      String subStr = String.fromCharCodes(runes.sublist(0, end));
-      String? result = dict[subStr];
-      if (result != null && result.isNotEmpty) {
-        return PhraseConvert(word: subStr, result: result);
-      }
-    }
-    return null;
-  }
+  static PhraseConvert? stConvertForPhrase(String str, Map<String, String> dict, int min, int max) =>
+      convertForPhrase(
+        str,
+        dict,
+        (subStr, result) => result != null && result.isNotEmpty
+            ? PhraseConvert(word: subStr, result: result)
+            : null,
+        minPhraseLength ?? min,
+        maxPhraseLength ?? max,
+      );
 
   /// 添加繁体字字典
   static void addSimpToTradMap(Map<String, String> map) {

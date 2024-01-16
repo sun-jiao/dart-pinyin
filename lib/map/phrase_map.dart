@@ -40923,3 +40923,5 @@ Map<String, String> phraseMap = {
   "龟裂": "jūn,liè",
   "𥻗子": "chá,zi",
 };
+int minPhraseLengthPy = 2;
+int maxPhraseLengthPy = 14;

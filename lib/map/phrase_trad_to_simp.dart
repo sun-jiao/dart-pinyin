@@ -277,3 +277,5 @@ Map<String, String> phraseMapT2S = {
   "黄鍾公": "黄锺公",
   "龍鍾": "龙钟",
 };
+int minPhraseLengthT2S = 2;
+int maxPhraseLengthT2S = 14;

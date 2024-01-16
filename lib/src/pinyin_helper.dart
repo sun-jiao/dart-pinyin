@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:math';
 
 import 'package:pinyin/pinyin.dart';
 import 'package:pinyin/src/phrase_converter.dart';
@@ -12,20 +11,18 @@ class PinyinHelper {
   /// 所有带声调的拼音字母
   static const String allMarkedVowel = 'āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ';
   static const String allUnmarkedVowel = 'aeiouv';
-  static int minPhraseLength = 2;
-  static int maxPhraseLength = phraseMap.keys.reduce((a, b) {
-    return a.runes.length > b.runes.length ? a : b;
-  }).runes.length;
+  static int? minPhraseLength;
+  static int? maxPhraseLength;
 
   @Deprecated('replaced by minPhraseLength')
-  static int get minMultiLength => minPhraseLength;
+  static int get minMultiLength => minPhraseLength ?? minPhraseLengthPy;
   @Deprecated('replaced by minPhraseLength')
   static set minMultiLength(int length) {
     minPhraseLength = length;
   }
 
   @Deprecated('replaced by maxPhraseLength')
-  static int get maxMultiLength => maxPhraseLength;
+  static int get maxMultiLength => maxPhraseLength ?? maxPhraseLengthPy;
   @Deprecated('replaced by maxPhraseLength')
   static set maxMultiLength(int length) {
     maxPhraseLength = length;
@@ -80,7 +77,9 @@ class PinyinHelper {
       prevIsHan = isHan;
     }
     String res = sb.toString();
-    return ((res.endsWith(separator) && separator != '') ? res.substring(0, res.runes.length - 1) : res);
+    return ((res.endsWith(separator) && separator != '')
+        ? res.substring(0, res.runes.length - 1)
+        : res);
   }
 
   /// 获取字符串首字拼音
@@ -160,50 +159,37 @@ class PinyinHelper {
       {bool isShort = false}) {
     return convertToPinyinForPhrase(str, separator, format, isShort: isShort);
   }
-  
+
   /// 获取词组拼音
   /// @param str 需要转换的字符串
   /// @param separator 拼音分隔符
   /// @param format 拼音格式
   /// @return 词组拼音
   static PhraseConvert? convertToPinyinForPhrase(String str, String separator, PinyinFormat format,
-      {bool isShort = false}) {
-    final runes = str.runes.toList();
-
-    if (str.runes.toList().length < minPhraseLength) return null;
-    str = ChineseHelper.convertToSimplifiedChinese(str); // now only needed for phrases.
-
-    if (maxPhraseLength == 0) {
-      List<String> keys = phraseMap.keys.toList();
-      for (int i = 0, length = keys.length; i < length; i++) {
-        if (keys[i].runes.toList().length > maxPhraseLength) {
-          maxPhraseLength = keys[i].runes.toList().length;
-        }
-      }
-    }
-
-    for (int end = min(maxPhraseLength, runes.length);
-        (end >= minPhraseLength);
-        end--) {
-      String subStr = String.fromCharCodes(runes.sublist(0, end));
-      String? phraseValue = phraseMap[subStr];
-      if (phraseValue != null && phraseValue.isNotEmpty) {
-        List<String> strList = phraseValue.split(pinyinSeparator);
-        StringBuffer sb = StringBuffer();
-        strList.forEach((value) {
-          List<String> pinyin = formatPinyin(value, format);
-          if (isShort) {
-            sb.write(pinyin[0].substring(0, 1));
-          } else {
-            sb.write(pinyin[0]);
-            sb.write(separator);
+          {bool isShort = false}) =>
+      convertForPhrase(
+        ChineseHelper.convertToSimplifiedChinese(str),
+        phraseMap,
+        (subStr, phraseValue) {
+          if (phraseValue != null && phraseValue.isNotEmpty) {
+            List<String> strList = phraseValue.split(pinyinSeparator);
+            StringBuffer sb = StringBuffer();
+            strList.forEach((value) {
+              List<String> pinyin = formatPinyin(value, format);
+              if (isShort) {
+                sb.write(pinyin[0].substring(0, 1));
+              } else {
+                sb.write(pinyin[0]);
+                sb.write(separator);
+              }
+            });
+            return PhraseConvert(word: subStr, result: sb.toString());
           }
-        });
-        return PhraseConvert(word: subStr, result: sb.toString());
-      }
-    }
-    return null;
-  }
+          return null;
+        },
+        minPhraseLength ?? minPhraseLengthPy,
+        maxPhraseLength ?? maxPhraseLengthPy,
+      );
 
   /// 将单个汉字转换为相应格式的拼音
   /// @param c 需要转换成拼音的汉字

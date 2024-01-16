@@ -1,3 +1,5 @@
+import 'dart:math';
+
 @Deprecated('replaced by PhrasePinyin')
 class MultiPinyin extends PhraseConvert {
   @Deprecated('replaced by PhrasePinyin')
@@ -35,4 +37,22 @@ class PhraseConvert {
     sb.write('}');
     return sb.toString();
   }
+}
+
+PhraseConvert? convertForPhrase(String str, Map<String, String> dict, PhraseConvert? Function(String, String?) getResult, int minPhraseLength, int maxPhraseLength) {
+  final runes = str.runes.toList();
+
+  if (runes.length < minPhraseLength) return null;
+
+  for (int end = min(maxPhraseLength, runes.length);
+  (end >= minPhraseLength);
+  end--) {
+    String subStr = String.fromCharCodes(runes.sublist(0, end));
+    String? result = dict[subStr];
+    final convertResult = getResult.call(subStr, result);
+    if (convertResult != null) {
+      return convertResult;
+    }
+  }
+  return null;
 }

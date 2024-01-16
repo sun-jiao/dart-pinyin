@@ -53,4 +53,14 @@ Future<void> main() async {
   }
 
   output.writeln('};');
+
+  int minPhraseLength = theMap.keys.reduce((a, b) {
+    return a.runes.length < b.runes.length ? a : b;
+  }).runes.length;
+  int maxPhraseLength = theMap.keys.reduce((a, b) {
+    return a.runes.length > b.runes.length ? a : b;
+  }).runes.length;
+
+  output.writeln('''int minPhraseLengthPy = $minPhraseLength;
+int maxPhraseLengthPy = $maxPhraseLength;''');
 }
