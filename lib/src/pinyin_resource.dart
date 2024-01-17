@@ -1,12 +1,18 @@
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:io';
+
+import 'package:pinyin/data/phrase_map.dart';
+import 'package:pinyin/data/phrase_simp_to_trad.dart';
+import 'package:pinyin/data/phrase_trad_to_simp.dart';
+import 'package:pinyin/data/pinyin_map.dart';
+import 'package:pinyin/data/simp_to_trad_map.dart';
+import 'package:pinyin/data/trad_to_simp_map.dart';
 
 /// Pinyin Resource.
 class PinyinResource {
   /// get Pinyin Resource.
   static Map<String, String> getPinyinResource() {
-    return _getMap('lib/data/pinyin_map.json');
+    return _getMap(pinyinJson);
   }
 
   /// get Chinese Resource.
@@ -15,35 +21,32 @@ class PinyinResource {
 
   /// get Chinese Resource.
   static Map<String, String> getSimpToTradResource() {
-    return _getMap('lib/data/simp_to_trad_map.json');
+    return _getMap(simpToTradJson);
   }
 
   /// get Chinese Resource.
   static Map<String, String> getTradToSimpResource() {
-    return _getMap('lib/data/trad_to_simp_map.json');
+    return _getMap(tradToSimpJson);
   }
 
   /// get Multi Pinyin Resource.
   @Deprecated('Replaced by getPhraseResource')
-  static Map<String, String> getMultiPinyinResource() {
-    return _getMap('lib/data/pinyin_map.json');
-  }
+  static Map<String, String> getMultiPinyinResource() => getPhraseResource();
 
   static Map<String, String> getPhraseResource() {
-    return _getMap('lib/data/phrase_map.json');
+    return _getMap(phrasePinyin);
   }
 
   static Map<String, String> getPhraseSimpToTradResource() {
-    return _getMap('lib/data/phrase_simp_to_trad.json');
+    return _getMap(phraseS2TJson);
   }
 
   static Map<String, String> getPhraseTradToSimpResource() {
-    return _getMap('lib/data/phrase_trad_to_simp.json');
+    return _getMap(phraseT2SJson);
   }
 
-  static Map<String, String> _getMap(String filename) {
-    final myJsonAsString = File(filename).readAsStringSync();
-    final decoded = json.decode(myJsonAsString);
+  static Map<String, String> _getMap(String jsonAsString) {
+    final decoded = json.decode(jsonAsString);
     var largeMap = SplayTreeMap<String, String>();
     for (var entry in decoded.entries) {
       largeMap[entry.key] = entry.value;

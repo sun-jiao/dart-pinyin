@@ -1,4 +1,4 @@
-{
+const String phraseT2SJson = '''{
   "一目瞭然": "一目了然",
   "上鍊": "上链",
   "不瞭解": "不了解",
@@ -275,4 +275,6 @@
   "顧藉": "顾借",
   "麼些族": "麽些族",
   "黄鍾公": "黄锺公",
-  "龍鍾": "龙钟"}
+  "龍鍾": "龙钟"}''';
+int minPhraseLengthT2S = 2;
+int maxPhraseLengthT2S = 14;

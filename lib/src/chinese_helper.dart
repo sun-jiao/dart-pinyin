@@ -1,4 +1,5 @@
-import 'phrase_length.dart';
+import '../data/phrase_simp_to_trad.dart';
+import '../data/phrase_trad_to_simp.dart';
 import 'phrase_converter.dart';
 import 'pinyin_resource.dart';
 

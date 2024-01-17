@@ -23,7 +23,7 @@ Future<void> main() async {
     shouldParseNumbers: false,
   )).toList();
 
-  final file = File('./lib/data/phrase_map.json');
+  final file = File('./lib/data/phrase_map.dart');
   if (await file.exists()) {
     await file.delete();
   }
@@ -31,7 +31,7 @@ Future<void> main() async {
   final output = file.openWrite();
 
   Map<String, String> theMap = HashMap();
-  output.write('{');
+  output.write('const String phrasePinyin = \'\'\'{');
   bool alreadyWrite = false;
 
   for (var field in fields) {
@@ -60,7 +60,7 @@ Future<void> main() async {
     }
   }
 
-  output.write('}');
+  output.write('}\'\'\';');
 
   int minPhraseLength = theMap.keys.reduce((a, b) {
     return a.runes.length < b.runes.length ? a : b;
@@ -69,6 +69,6 @@ Future<void> main() async {
     return a.runes.length > b.runes.length ? a : b;
   }).runes.length;
 
-  File('lib/map/phrase_length.dart').openWrite(mode: FileMode.append).writeln('''int minPhraseLengthPy = $minPhraseLength;
+  output.writeln('''int minPhraseLengthPy = $minPhraseLength;
 int maxPhraseLengthPy = $maxPhraseLength;''');
 }

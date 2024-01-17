@@ -19,9 +19,9 @@ Future<void> main() async {
   }
 
 
-  final pinyin = File('./lib/data/pinyin_map.json');
-  final simp = File('./lib/data/trad_to_simp_map.json');
-  final trad = File('./lib/data/simp_to_trad_map.json');
+  final pinyin = File('./lib/data/pinyin_map.dart');
+  final simp = File('./lib/data/trad_to_simp_map.dart');
+  final trad = File('./lib/data/simp_to_trad_map.dart');
   for (final file in [pinyin, simp, trad]) {
     if (await file.exists()) {
       await file.delete();
@@ -32,9 +32,9 @@ Future<void> main() async {
   final simpOutput = simp.openWrite();
   final tradOutput = trad.openWrite();
 
-  pinyinOutput.write('{');
-  simpOutput.write('{');
-  tradOutput.write('{');
+  pinyinOutput.write('const String pinyinJson = \'\'\'{');
+  simpOutput.write('const String tradToSimpJson = \'\'\'{');
+  tradOutput.write('const String simpToTradJson = \'\'\'{');
 
   bool pinyinWrite = false;
   bool simpWrite = false;
@@ -69,7 +69,7 @@ Future<void> main() async {
     }
   }
 
-  pinyinOutput.writeln('\n}');
-  simpOutput.writeln('\n}');
-  tradOutput.writeln('\n}');
+  pinyinOutput.writeln('\n}\'\'\';');
+  simpOutput.writeln('\n}\'\'\';');
+  tradOutput.writeln('\n}\'\'\';');
 }

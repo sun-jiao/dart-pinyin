@@ -14,8 +14,8 @@ Future<void> main() async {
   ChineseHelper.phraseMapT2S;
   ChineseHelper.tradToSimpMap;
   ChineseHelper.simpToTradMap;
-  final s2t = ['dev/data/STPhrases.txt', './lib/data/phrase_simp_to_trad.json', 'S2T', ChineseHelper.convertToSimplifiedChinese];
-  final t2s = ['dev/data/TSPhrases.txt', './lib/data/phrase_trad_to_simp.json', 'T2S', ChineseHelper.convertToTraditionalChinese];
+  final s2t = ['dev/data/STPhrases.txt', './lib/data/phrase_simp_to_trad.dart', 'S2T', ChineseHelper.convertToSimplifiedChinese];
+  final t2s = ['dev/data/TSPhrases.txt', './lib/data/phrase_trad_to_simp.dart', 'T2S', ChineseHelper.convertToTraditionalChinese];
 
   for (var list in [s2t, t2s]) {
     final input = File(list[0] as String).openRead();
@@ -33,7 +33,7 @@ Future<void> main() async {
     final output = file.openWrite();
 
     Map<String, String> theMap = HashMap();
-    output.write('{');
+    output.write('const String phrase${list[2]}Json = \'\'\'{');
     bool alreadyWrite = false;
 
     for (var field in fields) {
@@ -60,7 +60,7 @@ Future<void> main() async {
       }
     }
 
-    output.write('}');
+    output.write('}\'\'\';');
 
 
 
@@ -71,7 +71,7 @@ Future<void> main() async {
       return a.runes.length > b.runes.length ? a : b;
     }).runes.length;
 
-    File('lib/map/phrase_length.dart').openWrite(mode: FileMode.append).writeln('''int minPhraseLength${list[2] as String} = $minPhraseLength;
+    output.writeln('''int minPhraseLength${list[2] as String} = $minPhraseLength;
 int maxPhraseLength${list[2] as String} = $maxPhraseLength;''');
   }
 }

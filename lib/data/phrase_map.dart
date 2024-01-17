@@ -1,4 +1,4 @@
-{
+const String phrasePinyin = '''{
   "㞎㞎": "bǎ,ba",
   "㧑挹": "huī,yì",
   "㧑损": "huī,sǔn",
@@ -40921,4 +40921,6 @@
   "龟背竹": "guī,bèi,zhú",
   "龟背锦": "guī,bèi,jǐn",
   "龟裂": "jūn,liè",
-  "𥻗子": "chá,zi"}
+  "𥻗子": "chá,zi"}''';
+int minPhraseLengthPy = 2;
+int maxPhraseLengthPy = 14;

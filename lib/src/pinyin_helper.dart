@@ -1,8 +1,8 @@
 import 'dart:collection';
 
+import '../data/phrase_map.dart';
 import 'chinese_helper.dart';
 import 'phrase_converter.dart';
-import 'phrase_length.dart';
 import 'pinyin_exception.dart';
 import 'pinyin_format.dart';
 import 'pinyin_resource.dart';
