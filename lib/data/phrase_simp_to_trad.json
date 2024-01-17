@@ -1,4 +1,4 @@
-Map<String, String> phraseMapS2T = {
+{
   "㓦划": "㓦劃",
   "一丝不挂": "一絲不掛",
   "一了心愿": "一了心願",
@@ -49056,7 +49056,4 @@ Map<String, String> phraseMapS2T = {
   "龚照胜": "龔照勝",
   "龚胜": "龔勝",
   "龟卜": "龜卜",
-  "龟鉴": "龜鑑",
-};
-int minPhraseLengthS2T = 2;
-int maxPhraseLengthS2T = 16;
+  "龟鉴": "龜鑑"}

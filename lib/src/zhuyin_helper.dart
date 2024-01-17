@@ -1,4 +1,6 @@
-import 'package:pinyin/pinyin.dart';
+import 'pinyin_format.dart';
+import 'pinyin_helper.dart';
+import 'zhuyin_resource.dart';
 
 class ZhuyinHelper {
   static Map<String, String> pinyinToZhuyinMap =

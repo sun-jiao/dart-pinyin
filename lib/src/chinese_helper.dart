@@ -1,10 +1,39 @@
-import 'package:pinyin/pinyin.dart';
-import 'package:pinyin/src/phrase_converter.dart';
+import 'phrase_length.dart';
+import 'phrase_converter.dart';
+import 'pinyin_resource.dart';
 
 /// Chinese Helper.
 class ChineseHelper {
   static int? minPhraseLength;
   static int? maxPhraseLength;
+
+  static Map<String, String>? _tradToSimpMap;
+
+  static Map<String, String> get tradToSimpMap {
+    _tradToSimpMap ??= PinyinResource.getTradToSimpResource();
+    return _tradToSimpMap!;
+  }
+
+  static Map<String, String>? _simpToTradMap;
+
+  static Map<String, String> get simpToTradMap {
+    _simpToTradMap ??= PinyinResource.getSimpToTradResource();
+    return _simpToTradMap!;
+  }
+
+  static Map<String, String>? _phraseMapS2T;
+
+  static Map<String, String> get phraseMapS2T {
+    _phraseMapS2T ??= PinyinResource.getPhraseSimpToTradResource();
+    return _phraseMapS2T!;
+  }
+
+  static Map<String, String>? _phraseMapT2S;
+
+  static Map<String, String> get phraseMapT2S {
+    _phraseMapT2S ??= PinyinResource.getPhraseTradToSimpResource();
+    return _phraseMapT2S!;
+  }
 
   static bool isChineseCode(int code) =>
       (code == 0x3007) || // "〇" is also a Chinese character  〇也是汉字

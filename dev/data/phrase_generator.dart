@@ -10,9 +10,11 @@ const errorWords = ['𫛚', '𱉻𱊊', '陕西', '苜蓿', '石龙子']; // the
 Future<void> main() async {
   // download data from https://github.com/mozillazg/phrase-pinyin-data
   // old multi_pinyin_dict are totally covered by phrase_map
-  phraseMap = {};
+  // phraseMap = {};
   PinyinHelper.minPhraseLength = 1;
   PinyinHelper.maxPhraseLength = 1;
+  PinyinHelper.phraseMap;
+  PinyinHelper.pinyinMap;
 
   final input = File('dev/data/large_pinyin.txt').openRead();
   final fields = await input.transform(utf8.decoder).transform(CsvToListConverter(
@@ -21,7 +23,7 @@ Future<void> main() async {
     shouldParseNumbers: false,
   )).toList();
 
-  final file = File('./lib/map/phrase_map.dart');
+  final file = File('./lib/data/phrase_map.json');
   if (await file.exists()) {
     await file.delete();
   }
@@ -29,7 +31,8 @@ Future<void> main() async {
   final output = file.openWrite();
 
   Map<String, String> theMap = HashMap();
-  output.writeln('Map<String, String> phraseMap = {');
+  output.write('{');
+  bool alreadyWrite = false;
 
   for (var field in fields) {
     final word = ChineseHelper.convertToSimplifiedChinese(field[0].trim()); // some phrases are mixtures of both trad chars and simp chars
@@ -44,15 +47,20 @@ Future<void> main() async {
           }
         } else {
           theMap[word] = pinyin;
-          output.writeln('  "$word": "$pinyin",');
+          if (alreadyWrite) {
+            output.write(',\n  "$word": "$pinyin"');
+          } else {
+            alreadyWrite = true;
+            output.write('\n  "$word": "$pinyin"');
+          }
         }
       }
     } catch (e, s) {
-      print(e);
+      print(s);
     }
   }
 
-  output.writeln('};');
+  output.write('}');
 
   int minPhraseLength = theMap.keys.reduce((a, b) {
     return a.runes.length < b.runes.length ? a : b;
@@ -61,6 +69,6 @@ Future<void> main() async {
     return a.runes.length > b.runes.length ? a : b;
   }).runes.length;
 
-  output.writeln('''int minPhraseLengthPy = $minPhraseLength;
+  File('lib/map/phrase_length.dart').openWrite(mode: FileMode.append).writeln('''int minPhraseLengthPy = $minPhraseLength;
 int maxPhraseLengthPy = $maxPhraseLength;''');
 }

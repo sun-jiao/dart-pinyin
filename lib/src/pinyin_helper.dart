@@ -1,7 +1,11 @@
 import 'dart:collection';
 
-import 'package:pinyin/pinyin.dart';
-import 'package:pinyin/src/phrase_converter.dart';
+import 'chinese_helper.dart';
+import 'phrase_converter.dart';
+import 'phrase_length.dart';
+import 'pinyin_exception.dart';
+import 'pinyin_format.dart';
+import 'pinyin_resource.dart';
 
 /// 汉字转拼音类.
 class PinyinHelper {
@@ -13,6 +17,20 @@ class PinyinHelper {
   static const String allUnmarkedVowel = 'aeiouv';
   static int? minPhraseLength;
   static int? maxPhraseLength;
+
+  static Map<String, String>? _phraseMap;
+
+  static Map<String, String> get phraseMap {
+    _phraseMap ??= PinyinResource.getPhraseResource();
+    return _phraseMap!;
+  }
+
+  static Map<String, String>? _pinyinMap;
+
+  static Map<String, String> get pinyinMap {
+    _pinyinMap ??= PinyinResource.getPinyinResource();
+    return _pinyinMap!;
+  }
 
   @Deprecated('replaced by minPhraseLength')
   static int get minMultiLength => minPhraseLength ?? minPhraseLengthPy;

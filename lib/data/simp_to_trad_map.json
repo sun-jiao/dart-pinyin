@@ -1,4 +1,4 @@
-Map<String, String> simpToTradMap = {
+{
   "㐫": "𠒋",
   "㐵": "𰂔",
   "㐷": "傌",
@@ -7293,5 +7293,5 @@ Map<String, String> simpToTradMap = {
   "𲎨": "𪘁",
   "𲎩": "𪘵",
   "𲎪": "𪙦",
-  "𲎫": "𪚇",
-};
+  "𲎫": "𪚇"
+}

@@ -1,4 +1,4 @@
-Map<String, String> phraseMap = {
+{
   "㞎㞎": "bǎ,ba",
   "㧑挹": "huī,yì",
   "㧑损": "huī,sǔn",
@@ -40921,7 +40921,4 @@ Map<String, String> phraseMap = {
   "龟背竹": "guī,bèi,zhú",
   "龟背锦": "guī,bèi,jǐn",
   "龟裂": "jūn,liè",
-  "𥻗子": "chá,zi",
-};
-int minPhraseLengthPy = 2;
-int maxPhraseLengthPy = 14;
+  "𥻗子": "chá,zi"}

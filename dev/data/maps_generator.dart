@@ -19,9 +19,9 @@ Future<void> main() async {
   }
 
 
-  final pinyin = File('./lib/map/pinyin_map.dart');
-  final simp = File('./lib/map/trad_to_simp_map.dart');
-  final trad = File('./lib/map/simp_to_trad_map.dart');
+  final pinyin = File('./lib/data/pinyin_map.json');
+  final simp = File('./lib/data/trad_to_simp_map.json');
+  final trad = File('./lib/data/simp_to_trad_map.json');
   for (final file in [pinyin, simp, trad]) {
     if (await file.exists()) {
       await file.delete();
@@ -32,25 +32,44 @@ Future<void> main() async {
   final simpOutput = simp.openWrite();
   final tradOutput = trad.openWrite();
 
-  pinyinOutput.writeln('Map<String, String> pinyinMap = {');
-  simpOutput.writeln('Map<String, String> tradToSimpMap = {');
-  tradOutput.writeln('Map<String, String> simpToTradMap = {');
+  pinyinOutput.write('{');
+  simpOutput.write('{');
+  tradOutput.write('{');
+
+  bool pinyinWrite = false;
+  bool simpWrite = false;
+  bool tradWrite = false;
 
   for (var field in fields.sublist(1)) {
     if (field[3].toString().isNotEmpty) {
-      pinyinOutput.writeln('  "${field[1]}": "${field[3]}",');
+      if (pinyinWrite) {
+        pinyinOutput.write(',\n  "${field[1]}": "${field[3]}"');
+      } else {
+        pinyinWrite = true;
+        pinyinOutput.write('\n  "${field[1]}": "${field[3]}"');
+      }
     }
 
     if (field[4].toString().isNotEmpty) {
-      simpOutput.writeln('  "${field[1]}": "${field[4]}",');
+      if (simpWrite) {
+        simpOutput.write(',\n  "${field[1]}": "${field[4]}"');
+      } else {
+        simpWrite = true;
+        simpOutput.write('\n  "${field[1]}": "${field[4]}"');
+      }
     }
 
     if (field[5].toString().isNotEmpty) {
-      tradOutput.writeln('  "${field[1]}": "${field[5]}",');
+      if (tradWrite) {
+        tradOutput.write(',\n  "${field[1]}": "${field[5]}"');
+      } else {
+        tradWrite = true;
+        tradOutput.write('\n  "${field[1]}": "${field[5]}"');
+      }
     }
   }
 
-  pinyinOutput.writeln('};');
-  simpOutput.writeln('};');
-  tradOutput.writeln('};');
+  pinyinOutput.writeln('\n}');
+  simpOutput.writeln('\n}');
+  tradOutput.writeln('\n}');
 }

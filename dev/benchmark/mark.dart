@@ -7,8 +7,7 @@ Future<void> main() async {
   for (int i = 0; i < 10; i++) {
     print('doing the ${i+1}× benchmark');
     final start = DateTime.now();
-    PinyinHelper.maxMultiLength = 5;
-    PinyinHelper.getPinyin(file * (i + 1),
+    final result = PinyinHelper.getPinyin(file * (i + 1),
         separator: " ", format: PinyinFormat.WITH_TONE_MARK);
     final end = DateTime.now();
     print(end.millisecondsSinceEpoch - start.millisecondsSinceEpoch);
