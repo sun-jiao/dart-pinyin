@@ -11,39 +11,27 @@ import 'package:pinyin/data/trad_to_simp_map.dart';
 /// Pinyin Resource.
 class PinyinResource {
   /// get Pinyin Resource.
-  static Map<String, String> getPinyinResource() {
-    return _getMap(pinyinJson);
-  }
+  static Map<String, String> getPinyinResource() => _getMap(pinyinJson);
 
   /// get Chinese Resource.
   @Deprecated('Replaced by getSimpToTradResource and getTradToSimpResource')
   static Map<String, String> getChineseResource() => getTradToSimpResource();
 
   /// get Chinese Resource.
-  static Map<String, String> getSimpToTradResource() {
-    return _getMap(simpToTradJson);
-  }
+  static Map<String, String> getSimpToTradResource() => _getMap(simpToTradJson);
 
   /// get Chinese Resource.
-  static Map<String, String> getTradToSimpResource() {
-    return _getMap(tradToSimpJson);
-  }
+  static Map<String, String> getTradToSimpResource() => _getMap(tradToSimpJson);
 
   /// get Multi Pinyin Resource.
   @Deprecated('Replaced by getPhraseResource')
   static Map<String, String> getMultiPinyinResource() => getPhraseResource();
 
-  static Map<String, String> getPhraseResource() {
-    return _getMap(phrasePinyin);
-  }
+  static Map<String, String> getPhraseResource() => _getMap(phrasePinyin);
 
-  static Map<String, String> getPhraseSimpToTradResource() {
-    return _getMap(phraseS2TJson);
-  }
+  static Map<String, String> getPhraseSimpToTradResource() => _getMap(phraseS2TJson);
 
-  static Map<String, String> getPhraseTradToSimpResource() {
-    return _getMap(phraseT2SJson);
-  }
+  static Map<String, String> getPhraseTradToSimpResource() => _getMap(phraseT2SJson);
 
   static Map<String, String> _getMap(String jsonAsString) {
     final decoded = json.decode(jsonAsString);

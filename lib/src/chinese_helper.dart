@@ -8,32 +8,35 @@ class ChineseHelper {
   static int? minPhraseLength;
   static int? maxPhraseLength;
 
-  static Map<String, String>? _tradToSimpMap;
+  static Map<String, String>? _charT2SMap;
 
-  static Map<String, String> get tradToSimpMap {
-    _tradToSimpMap ??= PinyinResource.getTradToSimpResource();
-    return _tradToSimpMap!;
+  static Map<String, String> get charT2SMap {
+    _charT2SMap ??= PinyinResource.getTradToSimpResource();
+    return _charT2SMap!;
   }
 
-  static Map<String, String>? _simpToTradMap;
+  @Deprecated('replaced by tradToSimpMap and simpToTradMap')
+  static Map<String, String> get chineseMap => charT2SMap;
 
-  static Map<String, String> get simpToTradMap {
-    _simpToTradMap ??= PinyinResource.getSimpToTradResource();
-    return _simpToTradMap!;
+  static Map<String, String>? _charS2TMap;
+
+  static Map<String, String> get charS2TMap {
+    _charS2TMap ??= PinyinResource.getSimpToTradResource();
+    return _charS2TMap!;
   }
 
-  static Map<String, String>? _phraseMapS2T;
+  static Map<String, String>? _phraseT2SMap;
 
-  static Map<String, String> get phraseMapS2T {
-    _phraseMapS2T ??= PinyinResource.getPhraseSimpToTradResource();
-    return _phraseMapS2T!;
+  static Map<String, String> get phraseT2SMap {
+    _phraseT2SMap ??= PinyinResource.getPhraseTradToSimpResource();
+    return _phraseT2SMap!;
   }
 
-  static Map<String, String>? _phraseMapT2S;
+  static Map<String, String>? _phraseS2TMap;
 
-  static Map<String, String> get phraseMapT2S {
-    _phraseMapT2S ??= PinyinResource.getPhraseTradToSimpResource();
-    return _phraseMapT2S!;
+  static Map<String, String> get phraseS2TMap {
+    _phraseS2TMap ??= PinyinResource.getPhraseSimpToTradResource();
+    return _phraseS2TMap!;
   }
 
   static bool isChineseCode(int code) =>
@@ -68,9 +71,12 @@ class ChineseHelper {
   /// 判断某个字符是否为繁体字
   /// @param c 需要判断的字符
   /// @return 是繁体字返回true，否则返回false
-  static bool isTraditionalChinese(String c) {
-    return tradToSimpMap.containsKey(c);
-  }
+  static bool isSimplifiedChinese(String c) => charS2TMap.containsKey(c);
+
+  /// 判断某个字符是否为繁体字
+  /// @param c 需要判断的字符
+  /// @return 是繁体字返回true，否则返回false
+  static bool isTraditionalChinese(String c) => charT2SMap.containsKey(c);
 
   /// 判断字符串中是否包含中文
   /// @param str 字符串
@@ -88,30 +94,24 @@ class ChineseHelper {
   /// 将单个繁体字转换为简体字
   /// @param c 需要转换的繁体字
   /// @return 转换后的简体字
-  static String convertCharToSimplifiedChinese(String c) {
-    String? simplifiedChinese = tradToSimpMap[c];
-    return simplifiedChinese ?? c;
-  }
+  static String convertCharToSimplifiedChinese(String c) => charT2SMap[c] ?? c;
 
   /// 将单个简体字转换为繁体字
   /// @param c 需要转换的简体字
   /// @return 转换后的繁体字
-  static String convertCharToTraditionalChinese(String c) {
-    String? traditionalChinese = simpToTradMap[c];
-    return traditionalChinese ?? c;
-  }
+  static String convertCharToTraditionalChinese(String c) => charS2TMap[c] ?? c;
 
   /// 将繁体字转换为简体字
   /// @param str 需要转换的繁体字
   /// @return 转换后的简体字
   static String convertToSimplifiedChinese(String str) =>
-      _stringConvert(str, phraseMapT2S, convertCharToSimplifiedChinese, minPhraseLengthT2S, maxPhraseLengthT2S);
+      _stringConvert(str, phraseT2SMap, convertCharToSimplifiedChinese, minPhraseLengthT2S, maxPhraseLengthT2S);
 
   /// 将简体字转换为繁体字
   /// @param str 需要转换的简体字
   /// @return 转换后的繁体字
   static String convertToTraditionalChinese(String str) =>
-      _stringConvert(str, phraseMapS2T, convertCharToTraditionalChinese, minPhraseLengthS2T, maxPhraseLengthS2T);
+      _stringConvert(str, phraseS2TMap, convertCharToTraditionalChinese, minPhraseLengthS2T, maxPhraseLengthS2T);
 
   static String _stringConvert(
       String str, Map<String, String> dict, String Function(String) singleCharConvert, int min, int max) {
@@ -157,12 +157,12 @@ class ChineseHelper {
 
   /// 添加繁体字字典
   static void addSimpToTradMap(Map<String, String> map) {
-    simpToTradMap.addAll(map);
+    charS2TMap.addAll(map);
   }
 
   /// 添加简体字字典
   static void addTradToSimpMap(Map<String, String> map) {
-    tradToSimpMap.addAll(map);
+    charT2SMap.addAll(map);
   }
 
   /// 添加繁体字字典

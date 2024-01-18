@@ -32,6 +32,9 @@ class PinyinHelper {
     return _pinyinMap!;
   }
 
+  @Deprecated('Replaced by phraseMap')
+  static Map<String, String> get multiPinyinMap => phraseMap;
+
   @Deprecated('replaced by minPhraseLength')
   static int get minMultiLength => minPhraseLength ?? minPhraseLengthPy;
   @Deprecated('replaced by minPhraseLength')
@@ -174,9 +177,7 @@ class PinyinHelper {
   /// @return 词组拼音
   @Deprecated('replaced by convertToPinyinForPhrase')
   static PhraseConvert? convertToMultiPinyin(String str, String separator, PinyinFormat format,
-      {bool isShort = false}) {
-    return convertToPinyinForPhrase(str, separator, format, isShort: isShort);
-  }
+      {bool isShort = false}) => convertToPinyinForPhrase(str, separator, format, isShort: isShort);
 
   /// 获取词组拼音
   /// @param str 需要转换的字符串
