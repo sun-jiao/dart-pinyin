@@ -60,7 +60,7 @@ Future<void> main() async {
     }
   }
 
-  output.write('}\'\'\';');
+  output.writeln('}\'\'\';');
 
   int minPhraseLength = theMap.keys.reduce((a, b) {
     return a.runes.length < b.runes.length ? a : b;

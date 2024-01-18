@@ -60,7 +60,7 @@ Future<void> main() async {
       }
     }
 
-    output.write('}\'\'\';');
+    output.writeln('}\'\'\';');
 
 
 
