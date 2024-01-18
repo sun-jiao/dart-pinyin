@@ -1,3 +1,11 @@
+## 3.2.0
+* update pinyin data and Chinese convert data
+* add data auto generator
+* renamed some fields and methods
+* add testcases
+* fix multiple separator
+* changed to using json
+
 ## 3.1.0
 * extend dict and minor fixes
 * fix separator error
@@ -8,7 +16,7 @@
 * minor fixes
 
 ## 3.0.0
-* Add support for characters with a Unicode larger than 0xFFFF.
+* Add support for non-URO Chinese characters.
 * Add support for Zhuyin (or Bopomofo, 注音符号 in Chinese), authored by @w830207.
 * update sdk version.
 * change library name.
