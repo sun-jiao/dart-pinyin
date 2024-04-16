@@ -58275,7 +58275,6 @@ const String pinyinJson = '''{
   "𰰌": "zhōu",
   "𰰏": "dài",
   "𰰑": "lóu",
-  "𰰞": "ài,yì",
   "𰰠": "xù,yù,xū",
   "𰰡": "méng",
   "𰰢": "tāng",
