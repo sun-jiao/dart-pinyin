@@ -1,3 +1,6 @@
+## 3.3.0
+* update pinyin data and Chinese convert data
+
 ## 3.2.0
 * update pinyin data and Chinese convert data
 * add data auto generator

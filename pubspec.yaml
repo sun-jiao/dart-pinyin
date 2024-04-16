@@ -1,6 +1,6 @@
 name: pinyin
 description: Convert Chinese characters to pinyin, simplified or traditional Chinese. Accurate and complete Chinese character dictionary. Fast conversion.
-version: 3.2.0
+version: 3.3.0
 homepage: https://github.com/sun-jiao/dart-pinyin
 
 environment:
