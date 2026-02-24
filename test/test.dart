@@ -28,6 +28,31 @@ void main() {
     // });
   });*/
 
+  group('Toned consonants in syllabic nasals', () {
+    // 嗯 has pinyin "èn,ń". The reading ń (U+0144) is a toned consonant, not a vowel.
+    // Before this fix, convertWithToneNumber would call allUnmarkedVowel.codeUnitAt(-1)
+    // and throw a RangeError because ń was absent from allMarkedVowel.
+    test('嗯 WITH_TONE_NUMBER no longer throws RangeError', () {
+      expect(
+        () => PinyinHelper.getPinyinE('嗯', separator: ' ', defPinyin: '#',
+            format: PinyinFormat.WITH_TONE_NUMBER),
+        returnsNormally,
+      );
+    });
+
+    test('嗯 WITH_TONE_NUMBER returns tone-numbered reading', () {
+      final result = PinyinHelper.getPinyinE('嗯', separator: ' ', defPinyin: '#',
+          format: PinyinFormat.WITH_TONE_NUMBER);
+      expect(result, equals('en4'));
+    });
+
+    test('嗯 WITH_TONE_MARK still works', () {
+      final result = PinyinHelper.getPinyinE('嗯', separator: ' ', defPinyin: '#',
+          format: PinyinFormat.WITH_TONE_MARK);
+      expect(result, equals('èn'));
+    });
+  });
+
   group('Regular conversions', () {
     final testStr = "汉语拼音方案";
     test('abbr', () {
