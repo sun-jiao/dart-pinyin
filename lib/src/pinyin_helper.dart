@@ -13,8 +13,12 @@ class PinyinHelper {
   static const String pinyinSeparator = ',';
 
   /// 所有带声调的拼音字母
-  static const String allMarkedVowel = 'āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ';
-  static const String allUnmarkedVowel = 'aeiouv';
+  /// Grouped in blocks of 4 (tones 1–4) per base vowel, matching allUnmarkedVowel by index.
+  /// The '-ńňǹ' suffix adds syllabic-n tones at positions 24–27 (group index 6 → 'n').
+  /// '-' occupies position 24 as a placeholder for n̄ (tone 1 n), which has no Unicode
+  /// precomposed form and does not appear in pinyin data.
+  static const String allMarkedVowel = 'āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ-ńňǹ';
+  static const String allUnmarkedVowel = 'aeiouvn';
   static int? minPhraseLength;
   static int? maxPhraseLength;
 
